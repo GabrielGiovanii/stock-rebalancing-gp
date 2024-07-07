@@ -20,7 +20,6 @@ public class WalletResource {
     @GetMapping
     public ResponseEntity<List<Wallet>> findAll() {
         List<Wallet> wallets = walletService.findAll();
-        wallets.add(new Wallet(1, "Bolsa", "Renda variável", 70.0));
         return ResponseEntity.ok().body(wallets);
     }
 

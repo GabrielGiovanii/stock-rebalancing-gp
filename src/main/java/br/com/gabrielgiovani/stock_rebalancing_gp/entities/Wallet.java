@@ -16,8 +16,7 @@ public class Wallet {
     public Wallet() {
     }
 
-    public Wallet(Integer id, String name, String description, Double investmentPercentage) {
-        this.id = id;
+    public Wallet(String name, String description, Double investmentPercentage) {
         this.name = name;
         this.description = description;
         this.investmentPercentage = investmentPercentage;
