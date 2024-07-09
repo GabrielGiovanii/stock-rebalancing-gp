@@ -1,6 +1,8 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "portfolio")
@@ -9,6 +11,9 @@ public class Portfolio {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
+
+    @NotBlank(message = "{NotBlank.must.not.be.blank}")
+    @Size(min = 1, max = 50, message = "{Size.must.be.between}")
     private String name;
     private String description;
     private Double investmentPercentage;
