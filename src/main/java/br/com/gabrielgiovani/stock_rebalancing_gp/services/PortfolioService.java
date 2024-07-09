@@ -13,11 +13,11 @@ import java.util.Optional;
 public class PortfolioService implements CRUDService<Portfolio> {
 
     @Autowired
-    private PortfolioRepository walletRepository;
+    private PortfolioRepository portfolioRepository;
 
     @Override
     public List<Portfolio> findAll() {
-        return walletRepository.findAll();
+        return portfolioRepository.findAll();
     }
 
     @Override
@@ -27,7 +27,7 @@ public class PortfolioService implements CRUDService<Portfolio> {
 
     @Override
     public Optional<Portfolio> findById(Integer id) {
-        return walletRepository.findById(id);
+        return portfolioRepository.findById(id);
     }
 
     @Override
@@ -38,11 +38,11 @@ public class PortfolioService implements CRUDService<Portfolio> {
 
     @Override
     public void deleteById(Integer id) {
-        walletRepository.deleteById(id);
+        portfolioRepository.deleteById(id);
     }
 
     @Override
     public void saveAll(List<Portfolio> entities) {
-        walletRepository.saveAll(entities);
+        portfolioRepository.saveAll(entities);
     }
 }
