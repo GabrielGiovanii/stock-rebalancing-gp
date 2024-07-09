@@ -9,5 +9,4 @@ public class StockRebalancingGpApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(StockRebalancingGpApplication.class, args);
 	}
-
 }

@@ -22,5 +22,4 @@ public class WalletResource {
         List<Wallet> wallets = walletService.findAll();
         return ResponseEntity.ok().body(wallets);
     }
-
 }

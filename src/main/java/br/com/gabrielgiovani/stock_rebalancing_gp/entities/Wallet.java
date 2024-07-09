@@ -53,5 +53,4 @@ public class Wallet {
     public void setInvestmentPercentage(Double investmentPercentage) {
         this.investmentPercentage = investmentPercentage;
     }
-
 }
