@@ -28,7 +28,7 @@ public class PortfolioResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> Method findById of the Portfolio entity and exception handling for it.(@PathVariable String id) {
+    public ResponseEntity<?> findById(@PathVariable String id) {
         try {
             Integer integerId = DataConversionUtils.convertToInteger(id);
 
