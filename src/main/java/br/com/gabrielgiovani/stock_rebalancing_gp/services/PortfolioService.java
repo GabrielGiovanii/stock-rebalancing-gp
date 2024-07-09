@@ -1,7 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Wallet;
-import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.WalletRepository;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
+import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,28 +10,28 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class WalletService implements CRUDService<Wallet> {
+public class PortfolioService implements CRUDService<Portfolio> {
 
     @Autowired
-    private WalletRepository walletRepository;
+    private PortfolioRepository walletRepository;
 
     @Override
-    public List<Wallet> findAll() {
+    public List<Portfolio> findAll() {
         return walletRepository.findAll();
     }
 
     @Override
-    public List<Wallet> findByFilters(Map<String, Object> filters) {
+    public List<Portfolio> findByFilters(Map<String, Object> filters) {
         return null;
     }
 
     @Override
-    public Optional<Wallet> findById(Integer id) {
+    public Optional<Portfolio> findById(Integer id) {
         return walletRepository.findById(id);
     }
 
     @Override
-    public void saveOrUpdate(Wallet entity) {
+    public void saveOrUpdate(Portfolio entity) {
         walletRepository.save(entity);
     }
 
@@ -41,7 +41,7 @@ public class WalletService implements CRUDService<Wallet> {
     }
 
     @Override
-    public void saveAll(List<Wallet> entities) {
+    public void saveAll(List<Portfolio> entities) {
         walletRepository.saveAll(entities);
     }
 }

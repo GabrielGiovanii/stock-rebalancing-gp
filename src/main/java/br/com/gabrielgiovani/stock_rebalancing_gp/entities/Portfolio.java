@@ -3,8 +3,8 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "wallet")
-public class Wallet {
+@Table(name = "portfolio")
+public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -13,10 +13,10 @@ public class Wallet {
     private String description;
     private Double investmentPercentage;
 
-    public Wallet() {
+    public Portfolio() {
     }
 
-    public Wallet(String name, String description, Double investmentPercentage) {
+    public Portfolio(String name, String description, Double investmentPercentage) {
         this.name = name;
         this.description = description;
         this.investmentPercentage = investmentPercentage;

@@ -1,7 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.config;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Wallet;
-import br.com.gabrielgiovani.stock_rebalancing_gp.services.WalletService;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
@@ -14,18 +14,18 @@ import java.util.Arrays;
 public class TestConfig implements CommandLineRunner {
 
     @Autowired
-    private WalletService walletService;
+    private PortfolioService walletService;
 
     @Override
     public void run(String... args) throws Exception {
-        Wallet w1 = new Wallet("Renda Variável",
+        Portfolio p1 = new Portfolio("Renda Variável",
                 "Focada em ações com potencial de alta valorização e/ou pagamento de dividendos.",
                 100.0);
 
-        Wallet w2 = new Wallet("Variando Positivo",
+        Portfolio p2 = new Portfolio("Variando Positivo",
                 "Focada em ações que pagam bons dividendos.",
                 100.0);
 
-        walletService.saveAll(Arrays.asList(w1, w2));
+        walletService.saveAll(Arrays.asList(p1, p2));
     }
 }
