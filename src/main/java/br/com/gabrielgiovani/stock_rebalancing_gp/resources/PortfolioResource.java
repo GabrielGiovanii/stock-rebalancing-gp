@@ -35,5 +35,18 @@ public class PortfolioResource {
 
             return portfolio.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
+
+    @PostMapping
     public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody Portfolio obj) {
+        Portfolio portfolio = portfolioService.insertOrUpdate(obj);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(portfolio);
+    }
+
+    @DeleteMapping(value = "/{id}")
+    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
+        portfolioService.deleteById(id);
+
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+    }
 }
