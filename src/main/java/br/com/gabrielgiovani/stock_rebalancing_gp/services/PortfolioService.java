@@ -37,8 +37,14 @@ public class PortfolioService implements CRUDService<Portfolio> {
     }
 
     @Override
-    public void deleteById(Integer id) {
-        portfolioRepository.deleteById(id);
+    public boolean deleteById(Integer id) {
+        if(portfolioRepository.existsById(id)) {
+            portfolioRepository.deleteById(id);
+
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override

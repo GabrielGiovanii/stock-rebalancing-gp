@@ -14,7 +14,7 @@ public interface CRUDService<T> {
 
     T insertOrUpdate(T entity);
 
-    void deleteById(Integer id);
+    boolean deleteById(Integer id);
 
     void saveAll(List<T> entities);
 }
