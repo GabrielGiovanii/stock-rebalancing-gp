@@ -31,7 +31,7 @@ public class PortfolioService implements CRUDService<Portfolio> {
     }
 
     @Override
-    public Portfolio saveOrUpdate(Portfolio entity) {
+    public Portfolio insertOrUpdate(Portfolio entity) {
         Portfolio portfolio = portfolioRepository.save(entity);
         return portfolio;
     }

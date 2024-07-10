@@ -41,4 +41,5 @@ public class PortfolioResource {
             return  ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
     }
+    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody Portfolio obj) {
 }

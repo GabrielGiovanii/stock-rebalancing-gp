@@ -12,7 +12,7 @@ public interface CRUDService<T> {
 
     Optional<T> findById(Integer id);
 
-    T saveOrUpdate(T entity);
+    T insertOrUpdate(T entity);
 
     void deleteById(Integer id);
 
