@@ -1,5 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.repositories.exceptions;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -17,7 +18,11 @@ import java.util.Map;
 public class ResourceExceptionHandler {
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(value = {MethodArgumentTypeMismatchException.class, MethodArgumentNotValidException.class})
+    @ExceptionHandler(value = {
+            MethodArgumentTypeMismatchException.class,
+            MethodArgumentNotValidException.class,
+            DataIntegrityViolationException.class
+    })
     @ResponseBody
     public Map<String, String> methodArgumentNotValid(Exception e) {
         Map<String, String> errors = new HashMap<>();
@@ -32,6 +37,8 @@ public class ResourceExceptionHandler {
         } else if (e instanceof MethodArgumentTypeMismatchException) {
             MethodArgumentTypeMismatchException ex = (MethodArgumentTypeMismatchException) e;
             errors.put(ex.getName(), "Invalid type for parameter " + ex.getName());
+        } else if (e instanceof DataIntegrityViolationException) {
+            errors.put("DataIntegrityViolation", "Data integrity violation occurred");
         }
 
         return errors;
