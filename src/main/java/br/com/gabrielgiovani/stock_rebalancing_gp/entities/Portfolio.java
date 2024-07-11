@@ -13,6 +13,7 @@ public class Portfolio {
 
     @NotBlank(message = "{notBlank.must.not.be.blank}")
     @Size(min = 1, max = 50, message = "{size.must.be.between}")
+    @Column(unique = true)
     private String name;
 
     @Size(min = 1, max = 200, message = "{size.must.be.between}")
