@@ -30,9 +30,12 @@ public class TestConfig implements CommandLineRunner {
         portfolioService.saveAll(Arrays.asList(p1, p2));
 
         Category c1 = new Category("Total Return",
-                "Empresas sólidas no mercado que pagam dividendos.", 60.0);
+                "Empresas sólidas no mercado que pagam dividendos.", 60.0, p1);
         Category c2 = new Category("Small Cap",
-                "Empresas pequenas com grande potencial de valorização.", 40.0);
+                "Empresas pequenas com grande potencial de valorização.", 40.0, p1);
+
+        p1.getCategories().add(c1);
+        p1.getCategories().add(c2);
         categoryService.saveAll(Arrays.asList(c1, c2));
     }
 }

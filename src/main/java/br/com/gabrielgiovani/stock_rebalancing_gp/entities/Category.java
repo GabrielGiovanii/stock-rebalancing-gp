@@ -1,5 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -24,13 +25,20 @@ public class Category {
     @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
     private Double  percentageUnderPortfolio;
 
+    @JsonIgnore
+    @NotNull
+    @ManyToOne
+    @JoinColumn(name = "portfolio_id")
+    private Portfolio portfolio;
+
     public Category() {
     }
 
-    public Category(String name, String description, Double percentageUnderPortfolio) {
+    public Category(String name, String description, Double percentageUnderPortfolio, Portfolio portfolio) {
         this.name = name;
         this.description = description;
         this.percentageUnderPortfolio = percentageUnderPortfolio;
+        this.portfolio = portfolio;
     }
 
     public Integer getId() {
@@ -47,5 +55,13 @@ public class Category {
 
     public Double getPercentageUnderPortfolio() {
         return percentageUnderPortfolio;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 }

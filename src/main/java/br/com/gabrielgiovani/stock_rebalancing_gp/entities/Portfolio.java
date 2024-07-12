@@ -3,6 +3,9 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "portfolio")
 public class Portfolio {
@@ -24,10 +27,15 @@ public class Portfolio {
     @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
     private Double investmentPercentage;
 
+    @OneToMany(mappedBy = "portfolio")
+    private List<Category> categories;
+
     public Portfolio() {
+        this.categories = new ArrayList<>();
     }
 
     public Portfolio(String name, String description, Double investmentPercentage) {
+        this.categories = new ArrayList<>();
         this.name = name;
         this.description = description;
         this.investmentPercentage = investmentPercentage;
@@ -63,5 +71,9 @@ public class Portfolio {
 
     public void setInvestmentPercentage(Double investmentPercentage) {
         this.investmentPercentage = investmentPercentage;
+    }
+
+    public List<Category> getCategories() {
+        return categories;
     }
 }
