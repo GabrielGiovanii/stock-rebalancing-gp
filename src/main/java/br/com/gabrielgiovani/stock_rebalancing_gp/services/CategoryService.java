@@ -1,38 +1,60 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class CategoryService implements CRUDService<Category> {
+public class CategoryService implements CRUDService<CategoryDTO> {
+
+    @Autowired
+    private PortfolioService portfolioService;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<Category> findAll() {
-        return categoryRepository.findAll();
+    public List<CategoryDTO> findAll() {
+        List<Category> categories = categoryRepository.findAll();
+        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<Category> findByFilters(Map<String, Object> filters) {
+    public List<CategoryDTO> findByFilters(Map<String, Object> filters) {
         return null;
     }
 
     @Override
-    public Optional<Category> findById(Integer id) {
-        return categoryRepository.findById(id);
+    public Optional<CategoryDTO> findById(Integer id) {
+        return categoryRepository.findById(id).map(CategoryDTO::new);
     }
 
     @Override
-    public Category insertOrUpdate(Category entity) {
-        return categoryRepository.save(entity);
+    public CategoryDTO insertOrUpdate(CategoryDTO dto) {
+        Category category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
+
+        Optional<Portfolio> optionalPortfolio = portfolioService.findById(dto.getPortfolioId());
+        Portfolio portfolio = optionalPortfolio.orElse(null);
+        category.setPortfolio(portfolio);
+
+        if(Objects.nonNull(portfolio)) {
+            portfolio.getCategories().add(category);
+        }
+
+        return new CategoryDTO(categoryRepository.save(category));
     }
 
     @Override
@@ -47,7 +69,6 @@ public class CategoryService implements CRUDService<Category> {
     }
 
     @Override
-    public void saveAll(List<Category> entities) {
-        categoryRepository.saveAll(entities);
+    public void saveAll(List<CategoryDTO> dtos) {
     }
 }

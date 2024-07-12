@@ -1,8 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 @Entity
 @Table(name = "category")
@@ -12,23 +10,18 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "{notBlank.must.not.be.blank}")
-    @Size(min = 1, max = 50, message = "{size.must.be.between}")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
-    @Size(min = 1, max = 200, message = "{size.must.be.between}")
+    @Column(nullable = true, length = 200)
     private String description;
 
-    @NotNull(message = "{notBlank.must.not.be.blank}")
-    @DecimalMin(value = "1.00", message = "{validation.decimalmin}")
-    @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
-    private Double  percentageUnderPortfolio;
+    @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
+    private Double percentageUnderPortfolio;
 
-    @JsonIgnore
-    @NotNull
     @ManyToOne
     @JoinColumn(name = "portfolio_id")
+    @Column(nullable = false)
     private Portfolio portfolio;
 
     public Category() {
@@ -45,16 +38,32 @@ public class Category {
         return id;
     }
 
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
     public String getName() {
         return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getDescription() {
         return description;
     }
 
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
     public Double getPercentageUnderPortfolio() {
         return percentageUnderPortfolio;
+    }
+
+    public void setPercentageUnderPortfolio(Double percentageUnderPortfolio) {
+        this.percentageUnderPortfolio = percentageUnderPortfolio;
     }
 
     public Portfolio getPortfolio() {

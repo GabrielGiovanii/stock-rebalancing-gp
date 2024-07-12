@@ -1,6 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ public class CategoryResource {
     private CategoryService categoryService;
 
     @GetMapping
-    public ResponseEntity<List<Category>> findAll() {
-        List<Category> categories = categoryService.findAll();
+    public ResponseEntity<List<CategoryDTO>> findAll() {
+        List<CategoryDTO> categoriesDTO = categoryService.findAll();
 
-        if(!categories.isEmpty()) {
-            return ResponseEntity.ok().body(categories);
+        if(!categoriesDTO.isEmpty()) {
+            return ResponseEntity.ok().body(categoriesDTO);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -31,16 +31,16 @@ public class CategoryResource {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable Integer id) {
-        Optional<Category> category = categoryService.findById(id);
+        Optional<CategoryDTO> categoryDTO = categoryService.findById(id);
 
-        return category.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return categoryDTO.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody Category obj) {
-        Category category = categoryService.insertOrUpdate(obj);
+    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody CategoryDTO obj) {
+        CategoryDTO categoryDTO = categoryService.insertOrUpdate(obj);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(category);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTO);
     }
 
     @DeleteMapping(value = "/{id}")
