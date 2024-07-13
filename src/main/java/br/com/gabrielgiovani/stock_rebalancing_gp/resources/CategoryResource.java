@@ -20,10 +20,10 @@ public class CategoryResource {
 
     @GetMapping
     public ResponseEntity<List<CategoryDTO>> findAll() {
-        List<CategoryDTO> categoriesDTO = categoryService.findAll();
+        List<CategoryDTO> categoriesDTOs = categoryService.findAll();
 
-        if(!categoriesDTO.isEmpty()) {
-            return ResponseEntity.ok().body(categoriesDTO);
+        if(!categoriesDTOs.isEmpty()) {
+            return ResponseEntity.ok().body(categoriesDTOs);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -37,10 +37,10 @@ public class CategoryResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody CategoryDTO obj) {
-        CategoryDTO categoryDTO = categoryService.insertOrUpdate(obj);
+    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO categoryDTOResponse = categoryService.insertOrUpdate(categoryDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTO);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTOResponse);
     }
 
     @DeleteMapping(value = "/{id}")

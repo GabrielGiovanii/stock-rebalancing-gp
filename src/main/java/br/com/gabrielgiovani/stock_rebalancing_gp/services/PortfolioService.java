@@ -1,5 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.PortfolioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,31 +9,38 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class PortfolioService implements CRUDService<Portfolio> {
+public class PortfolioService implements CRUDService<PortfolioDTO> {
 
     @Autowired
     private PortfolioRepository portfolioRepository;
 
     @Override
-    public List<Portfolio> findAll() {
-        return portfolioRepository.findAll();
+    public List<PortfolioDTO> findAll() {
+        return portfolioRepository.findAll().stream().map(PortfolioDTO::new).collect(Collectors.toList());
     }
 
     @Override
-    public List<Portfolio> findByFilters(Map<String, Object> filters) {
+    public List<PortfolioDTO> findByFilters(Map<String, Object> filters) {
         return null;
     }
 
     @Override
-    public Optional<Portfolio> findById(Integer id) {
-        return portfolioRepository.findById(id);
+    public Optional<PortfolioDTO> findById(Integer id) {
+        return portfolioRepository.findById(id).map(PortfolioDTO::new);
     }
 
     @Override
-    public Portfolio insertOrUpdate(Portfolio entity) {
-        return portfolioRepository.save(entity);
+    public PortfolioDTO insertOrUpdate(PortfolioDTO dto) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(dto.getId());
+        portfolio.setName(dto.getName());
+        portfolio.setDescription(dto.getDescription());
+        portfolio.setInvestmentPercentage(dto.getInvestmentPercentage());
+
+        return new PortfolioDTO(portfolioRepository.save(portfolio));
     }
 
     @Override
@@ -47,7 +55,6 @@ public class PortfolioService implements CRUDService<Portfolio> {
     }
 
     @Override
-    public void saveAll(List<Portfolio> entities) {
-        portfolioRepository.saveAll(entities);
+    public void saveAll(List<PortfolioDTO> dtos) {
     }
 }

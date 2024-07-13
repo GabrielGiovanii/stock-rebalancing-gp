@@ -1,6 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
@@ -9,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -46,11 +46,19 @@ public class CategoryService implements CRUDService<CategoryDTO> {
         category.setDescription(dto.getDescription());
         category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
 
-        Optional<Portfolio> optionalPortfolio = portfolioService.findById(dto.getPortfolioId());
-        Portfolio portfolio = optionalPortfolio.orElse(null);
-        category.setPortfolio(portfolio);
+        Optional<PortfolioDTO> optionalPortfolioDTO = portfolioService.findById(dto.getPortfolioId());
+        Portfolio portfolio = null;
 
-        if(Objects.nonNull(portfolio)) {
+        if(optionalPortfolioDTO.isPresent()) {
+            PortfolioDTO portfolioDTO = optionalPortfolioDTO.get();
+
+            portfolio = new Portfolio();
+            portfolio.setId(portfolioDTO.getId());
+            portfolio.setName(portfolioDTO.getName());
+            portfolio.setDescription(portfolioDTO.getDescription());
+            portfolio.setInvestmentPercentage(portfolioDTO.getInvestmentPercentage());
+
+            category.setPortfolio(portfolio);
             portfolio.getCategories().add(category);
         }
 

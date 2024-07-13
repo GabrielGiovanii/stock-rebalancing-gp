@@ -1,7 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,17 +13,13 @@ public class Portfolio {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @NotBlank(message = "{notBlank.must.not.be.blank}")
-    @Size(min = 1, max = 50, message = "{size.must.be.between}")
-    @Column(unique = true)
+    @Column(unique = true, nullable = false, length = 50)
     private String name;
 
-    @Size(min = 1, max = 200, message = "{size.must.be.between}")
+    @Column(length = 200)
     private String description;
 
-    @NotNull(message = "{notBlank.must.not.be.blank}")
-    @DecimalMin(value = "1.00", message = "{validation.decimalmin}")
-    @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
+    @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
     private Double investmentPercentage;
 
     @OneToMany(mappedBy = "portfolio")

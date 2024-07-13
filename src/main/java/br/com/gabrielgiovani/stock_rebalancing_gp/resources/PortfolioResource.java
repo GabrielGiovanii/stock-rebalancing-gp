@@ -1,6 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,11 +19,11 @@ public class PortfolioResource {
     private PortfolioService portfolioService;
 
     @GetMapping
-    public ResponseEntity<List<Portfolio>> findAll() {
-        List<Portfolio> portfolios = portfolioService.findAll();
+    public ResponseEntity<List<PortfolioDTO>> findAll() {
+        List<PortfolioDTO> portfoliosDTOs = portfolioService.findAll();
 
-        if(!portfolios.isEmpty()) {
-            return ResponseEntity.ok().body(portfolios);
+        if(!portfoliosDTOs.isEmpty()) {
+            return ResponseEntity.ok().body(portfoliosDTOs);
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
@@ -31,16 +31,16 @@ public class PortfolioResource {
 
     @GetMapping(value = "/{id}")
     public ResponseEntity<?> findById(@PathVariable Integer id) {
-            Optional<Portfolio> portfolio = portfolioService.findById(id);
+            Optional<PortfolioDTO> portfolioDTO = portfolioService.findById(id);
 
-            return portfolio.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+            return portfolioDTO.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody Portfolio obj) {
-        Portfolio portfolio = portfolioService.insertOrUpdate(obj);
+    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody PortfolioDTO portfolioDTO) {
+        PortfolioDTO portfolioDTOResponse = portfolioService.insertOrUpdate(portfolioDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(portfolio);
+        return ResponseEntity.status(HttpStatus.CREATED).body(portfolioDTOResponse);
     }
 
     @DeleteMapping(value = "/{id}")
