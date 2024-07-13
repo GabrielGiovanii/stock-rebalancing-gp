@@ -25,21 +25,6 @@ public class CategoryDTO {
     public CategoryDTO() {
     }
 
-    public CategoryDTO(String name, String description, Double percentageUnderPortfolio, Integer portfolioId) {
-        this.name = name;
-        this.description = description;
-        this.percentageUnderPortfolio = percentageUnderPortfolio;
-        this.portfolioId = portfolioId;
-    }
-
-    public CategoryDTO(Integer id, String name, String description, Double percentageUnderPortfolio, Integer portfolioId) {
-        this.id = id;
-        this.name = name;
-        this.description = description;
-        this.percentageUnderPortfolio = percentageUnderPortfolio;
-        this.portfolioId = portfolioId;
-    }
-
     public CategoryDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();

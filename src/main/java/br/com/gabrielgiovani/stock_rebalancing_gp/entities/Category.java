@@ -13,15 +13,14 @@ public class Category {
     @Column(unique = true, nullable = false, length = 50)
     private String name;
 
-    @Column(nullable = true, length = 200)
+    @Column(length = 200)
     private String description;
 
     @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
     private Double percentageUnderPortfolio;
 
     @ManyToOne
-    @JoinColumn(name = "portfolio_id")
-    @Column(nullable = false)
+    @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
 
     public Category() {
