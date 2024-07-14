@@ -55,8 +55,7 @@ class CategoryResourceTest {
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
-        assertTrue(response.getBody().size() > 1,
-                "The response body should contain at least 2 entities.");
+        assertTrue(response.getBody().size() > 1);
     }
 
     @Test
