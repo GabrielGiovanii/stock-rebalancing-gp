@@ -1,7 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
@@ -46,21 +45,11 @@ public class CategoryService implements CRUDService<CategoryDTO> {
         category.setDescription(dto.getDescription());
         category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
 
-        Optional<PortfolioDTO> optionalPortfolioDTO = portfolioService.findById(dto.getPortfolioId());
-        Portfolio portfolio = null;
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(dto.getPortfolioId());
 
-        if(optionalPortfolioDTO.isPresent()) {
-            PortfolioDTO portfolioDTO = optionalPortfolioDTO.get();
-
-            portfolio = new Portfolio();
-            portfolio.setId(portfolioDTO.getId());
-            portfolio.setName(portfolioDTO.getName());
-            portfolio.setDescription(portfolioDTO.getDescription());
-            portfolio.setInvestmentPercentage(portfolioDTO.getInvestmentPercentage());
-
-            category.setPortfolio(portfolio);
-            portfolio.getCategories().add(category);
-        }
+        category.setPortfolio(portfolio);
+        portfolio.getCategories().add(category);
 
         return new CategoryDTO(categoryRepository.save(category));
     }
