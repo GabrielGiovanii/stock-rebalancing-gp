@@ -30,7 +30,7 @@ public class PortfolioResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id) {
+    public ResponseEntity<PortfolioDTO> findById(@PathVariable Integer id) {
             Optional<PortfolioDTO> portfolioDTO = portfolioService.findById(id);
 
             return portfolioDTO.map(value -> ResponseEntity.ok().body(value))
@@ -38,14 +38,21 @@ public class PortfolioResource {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody PortfolioDTO portfolioDTO) {
+    public ResponseEntity<PortfolioDTO> insert(@Valid @RequestBody PortfolioDTO portfolioDTO) {
         PortfolioDTO portfolioDTOResponse = portfolioService.insertOrUpdate(portfolioDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(portfolioDTOResponse);
     }
 
+    @PutMapping
+    public ResponseEntity<PortfolioDTO> update(@Valid @RequestBody PortfolioDTO portfolioDTO) {
+        PortfolioDTO portfolioDTOResponse = portfolioService.insertOrUpdate(portfolioDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(portfolioDTOResponse);
+    }
+
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
         if(portfolioService.deleteById(id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
