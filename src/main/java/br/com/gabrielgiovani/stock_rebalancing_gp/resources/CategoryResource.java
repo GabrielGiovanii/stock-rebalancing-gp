@@ -30,21 +30,29 @@ public class CategoryResource {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<?> findById(@PathVariable Integer id) {
+    public ResponseEntity<CategoryDTO> findById(@PathVariable Integer id) {
         Optional<CategoryDTO> categoryDTO = categoryService.findById(id);
 
-        return categoryDTO.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        return categoryDTO.map(value -> ResponseEntity.ok().body(value))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<?> insertOrUpdate(@Valid @RequestBody CategoryDTO categoryDTO) {
+    public ResponseEntity<CategoryDTO> insert(@Valid @RequestBody CategoryDTO categoryDTO) {
         CategoryDTO categoryDTOResponse = categoryService.insertOrUpdate(categoryDTO);
 
         return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTOResponse);
     }
 
+    @PutMapping
+    public ResponseEntity<CategoryDTO> update(@Valid @RequestBody CategoryDTO categoryDTO) {
+        CategoryDTO categoryDTOResponse = categoryService.insertOrUpdate(categoryDTO);
+
+        return ResponseEntity.status(HttpStatus.OK).body(categoryDTOResponse);
+    }
+
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<?> deleteById(@PathVariable Integer id) {
+    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
         if(categoryService.deleteById(id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
