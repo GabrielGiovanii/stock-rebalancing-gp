@@ -33,7 +33,8 @@ public class PortfolioResource {
     public ResponseEntity<?> findById(@PathVariable Integer id) {
             Optional<PortfolioDTO> portfolioDTO = portfolioService.findById(id);
 
-            return portfolioDTO.map(value -> ResponseEntity.ok().body(value)).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+            return portfolioDTO.map(value -> ResponseEntity.ok().body(value))
+                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
