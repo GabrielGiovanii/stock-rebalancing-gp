@@ -1,4 +1,4 @@
-package br.com.gabrielgiovani.stock_rebalancing_gp.repositories.exceptions;
+package br.com.gabrielgiovani.stock_rebalancing_gp.resources.exceptions;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
