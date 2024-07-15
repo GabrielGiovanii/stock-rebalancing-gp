@@ -168,7 +168,7 @@ class CategoryResourceTest {
 
     @Test
     void deleteById_Ok() {
-        Integer categoryId = 2;
+        Integer categoryId = 3;
 
         ResponseEntity<Void> response = categoryResource.deleteById(categoryId);
 
