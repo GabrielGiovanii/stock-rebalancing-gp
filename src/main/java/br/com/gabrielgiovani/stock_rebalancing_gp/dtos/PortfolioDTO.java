@@ -24,10 +24,10 @@ public class PortfolioDTO {
     @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
     private Double investmentPercentage;
 
-    private List<Integer> categoryIds;
+    private List<Integer> categoriesIds;
 
     public PortfolioDTO() {
-        this.categoryIds = new ArrayList<>();
+        this.categoriesIds = new ArrayList<>();
     }
 
     public PortfolioDTO(Portfolio portfolio) {
@@ -36,10 +36,7 @@ public class PortfolioDTO {
         this.description = portfolio.getDescription();
         this.investmentPercentage = portfolio.getInvestmentPercentage();
 
-        this.categoryIds = portfolio.getCategories()
-                .stream()
-                .map(Category::getId)
-                .collect(Collectors.toList());
+        this.categoriesIds = new ArrayList<>();
     }
 
     public Integer getId() {
@@ -77,7 +74,7 @@ public class PortfolioDTO {
         this.investmentPercentage = investmentPercentage;
     }
 
-    public List<Integer> getCategoryId() {
-        return categoryIds;
+    public List<Integer> getCategoriesIds() {
+        return categoriesIds;
     }
 }
