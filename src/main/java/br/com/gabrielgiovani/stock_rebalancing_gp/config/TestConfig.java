@@ -27,15 +27,20 @@ public class TestConfig implements CommandLineRunner {
                 "Focada em ações com potencial de alta valorização e/ou pagamento de dividendos.", 100.0);
         Portfolio p2 = new Portfolio("Variando Positivo",
                 "Focada em ações que pagam bons dividendos.", 100.0);
-        portfolioRepository.saveAll(Arrays.asList(p1, p2));
+        Portfolio p3 = new Portfolio("Bolsa",
+                "Focada em variar.", 100.0);
+        portfolioRepository.saveAll(Arrays.asList(p1, p2, p3));
 
         Category c1 = new Category("Total Return",
                 "Empresas sólidas no mercado que pagam dividendos.", 60.0, p1);
         Category c2 = new Category("Small Cap",
                 "Empresas pequenas com grande potencial de valorização.", 40.0, p1);
+        Category c3 = new Category("Mid Cap",
+                "Empresas médias com médio potencial de valorização e que pagam dividendos.", 40.0, p1);
 
         p1.getCategories().add(c1);
         p1.getCategories().add(c2);
-        categoryRepository.saveAll(Arrays.asList(c1, c2));
+        p1.getCategories().add(c3);
+        categoryRepository.saveAll(Arrays.asList(c1, c2, c3));
     }
 }
