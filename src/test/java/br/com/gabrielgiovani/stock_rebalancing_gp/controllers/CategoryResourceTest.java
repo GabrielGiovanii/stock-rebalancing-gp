@@ -1,4 +1,4 @@
-package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
+package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
@@ -32,13 +32,13 @@ class CategoryResourceTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private CategoryResource categoryResource;
+    private CategoryController categoryResource;
 
     @Mock
     private CategoryService categoryServiceMock;
 
     @InjectMocks
-    private CategoryResource categoryResourceMock;
+    private CategoryController categoryResourceMock;
 
     private ObjectMapper objectMapper;
 

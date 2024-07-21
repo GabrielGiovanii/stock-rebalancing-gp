@@ -1,4 +1,4 @@
-package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
+package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
@@ -33,13 +33,13 @@ public class PortfolioResourceTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private PortfolioResource portfolioResource;
+    private PortfolioController portfolioResource;
 
     @Mock
     private PortfolioService portfolioServiceMock;
 
     @InjectMocks
-    private PortfolioResource portfolioResourceMock;
+    private PortfolioController portfolioResourceMock;
 
     private ObjectMapper objectMapper;
 

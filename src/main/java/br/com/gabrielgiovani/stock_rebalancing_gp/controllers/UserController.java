@@ -1,4 +1,4 @@
-package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
+package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.UserResponseDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.UserSaveDTO;

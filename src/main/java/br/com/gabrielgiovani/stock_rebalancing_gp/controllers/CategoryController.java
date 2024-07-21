@@ -1,4 +1,4 @@
-package br.com.gabrielgiovani.stock_rebalancing_gp.resources;
+package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
@@ -13,7 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping(value = "/categories")
-public class CategoryResource {
+public class CategoryController {
 
     @Autowired
     private CategoryService categoryService;
