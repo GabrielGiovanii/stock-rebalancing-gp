@@ -53,7 +53,7 @@ public class CategoryResource {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
-        if(categoryService.deleteById(id)) {
+        if(categoryService.wasDeletedById(id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

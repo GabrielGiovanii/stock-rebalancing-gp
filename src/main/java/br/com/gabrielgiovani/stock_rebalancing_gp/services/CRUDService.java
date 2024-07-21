@@ -12,9 +12,11 @@ public interface CRUDService<T> {
 
     Optional<T> findById(Integer id);
 
-    T insertOrUpdate(T dto);
+    Optional<T> findByName(String name);
 
-    boolean deleteById(Integer id);
+    T insertOrUpdate(T entity);
 
-    void saveAll(List<T> dtos);
+    Boolean wasDeletedById(Integer id);
+
+    void saveAll(List<T> entities);
 }

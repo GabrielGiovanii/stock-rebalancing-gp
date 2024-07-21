@@ -53,7 +53,7 @@ public class PortfolioResource {
 
     @DeleteMapping(value = "/{id}")
     public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
-        if(portfolioService.deleteById(id)) {
+        if(portfolioService.wasDeletedById(id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

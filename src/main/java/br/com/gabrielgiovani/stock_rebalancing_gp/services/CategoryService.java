@@ -38,15 +38,20 @@ public class CategoryService implements CRUDService<CategoryDTO> {
     }
 
     @Override
-    public CategoryDTO insertOrUpdate(CategoryDTO dto) {
+    public Optional<CategoryDTO> findByName(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public CategoryDTO insertOrUpdate(CategoryDTO entity) {
         Category category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
-        category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
+        category.setId(entity.getId());
+        category.setName(entity.getName());
+        category.setDescription(entity.getDescription());
+        category.setPercentageUnderPortfolio(entity.getPercentageUnderPortfolio());
 
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(dto.getPortfolioId());
+        portfolio.setId(entity.getPortfolioId());
 
         category.setPortfolio(portfolio);
         portfolio.getCategories().add(category);
@@ -55,7 +60,7 @@ public class CategoryService implements CRUDService<CategoryDTO> {
     }
 
     @Override
-    public boolean deleteById(Integer id) {
+    public Boolean wasDeletedById(Integer id) {
         if(categoryRepository.existsById(id)) {
             categoryRepository.deleteById(id);
 
@@ -66,6 +71,6 @@ public class CategoryService implements CRUDService<CategoryDTO> {
     }
 
     @Override
-    public void saveAll(List<CategoryDTO> dtos) {
+    public void saveAll(List<CategoryDTO> entities) {
     }
 }

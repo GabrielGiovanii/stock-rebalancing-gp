@@ -33,18 +33,23 @@ public class PortfolioService implements CRUDService<PortfolioDTO> {
     }
 
     @Override
-    public PortfolioDTO insertOrUpdate(PortfolioDTO dto) {
+    public Optional<PortfolioDTO> findByName(String name) {
+        return Optional.empty();
+    }
+
+    @Override
+    public PortfolioDTO insertOrUpdate(PortfolioDTO entity) {
         Portfolio portfolio = new Portfolio();
-        portfolio.setId(dto.getId());
-        portfolio.setName(dto.getName());
-        portfolio.setDescription(dto.getDescription());
-        portfolio.setInvestmentPercentage(dto.getInvestmentPercentage());
+        portfolio.setId(entity.getId());
+        portfolio.setName(entity.getName());
+        portfolio.setDescription(entity.getDescription());
+        portfolio.setInvestmentPercentage(entity.getInvestmentPercentage());
 
         return new PortfolioDTO(portfolioRepository.save(portfolio));
     }
 
     @Override
-    public boolean deleteById(Integer id) {
+    public Boolean wasDeletedById(Integer id) {
         if(portfolioRepository.existsById(id)) {
             portfolioRepository.deleteById(id);
 
@@ -55,6 +60,6 @@ public class PortfolioService implements CRUDService<PortfolioDTO> {
     }
 
     @Override
-    public void saveAll(List<PortfolioDTO> dtos) {
+    public void saveAll(List<PortfolioDTO> entities) {
     }
 }
