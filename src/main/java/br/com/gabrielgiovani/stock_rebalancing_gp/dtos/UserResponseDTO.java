@@ -5,7 +5,7 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 public class UserResponseDTO {
 
     private Integer id;
-    private String userName;
+    private String username;
     private String fullName;
 
     public UserResponseDTO() {
@@ -13,7 +13,7 @@ public class UserResponseDTO {
 
     public UserResponseDTO(User user) {
         this.id = user.getId();
-        this.userName = user.getUserName();
+        this.username = user.getUsername();
         this.fullName = user.getFullName();
     }
 
@@ -25,12 +25,12 @@ public class UserResponseDTO {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getFullName() {

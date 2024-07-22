@@ -9,7 +9,7 @@ public class UserSaveDTO {
 
     @NotBlank(message = "{notBlank.must.not.be.blank}")
     @Size(min = 1, max = 50, message = "{size.must.be.between}")
-    private String userName;
+    private String username;
 
     @NotBlank(message = "{notBlank.must.not.be.blank}")
     @Size(min = 1, max = 50, message = "{size.must.be.between}")
@@ -30,12 +30,12 @@ public class UserSaveDTO {
         this.id = id;
     }
 
-    public String getUserName() {
-        return userName;
+    public String getUsername() {
+        return username;
     }
 
-    public void setUserName(String userName) {
-        this.userName = userName;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {

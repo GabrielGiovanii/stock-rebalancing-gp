@@ -37,7 +37,7 @@ public class UserService implements CRUDService<User>, EntityCreationService<Use
 
     @Override
     public Optional<User> findByName(String name) {
-        return userRepository.findByUserName(name);
+        return userRepository.findByUsername(name);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class UserService implements CRUDService<User>, EntityCreationService<Use
     @Override
     public User createEntity(UserSaveDTO dto) {
         User user = new User();
-        user.setUserName(dto.getUserName());
+        user.setUsername(dto.getUsername());
         user.setPassword(passwordEncoder.encode(dto.getPassword()));
         user.setFullName(dto.getFullName());
 
