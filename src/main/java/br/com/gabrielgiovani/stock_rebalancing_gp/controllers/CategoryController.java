@@ -39,16 +39,16 @@ public class CategoryController {
 
     @PostMapping
     public ResponseEntity<CategoryDTO> insert(@Valid @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO categoryDTOResponse = categoryService.insertOrUpdate(categoryDTO);
+        CategoryDTO categoryResponseDTO = categoryService.insertOrUpdate(categoryDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(categoryDTOResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(categoryResponseDTO);
     }
 
     @PutMapping
     public ResponseEntity<CategoryDTO> update(@Valid @RequestBody CategoryDTO categoryDTO) {
-        CategoryDTO categoryDTOResponse = categoryService.insertOrUpdate(categoryDTO);
+        CategoryDTO categoryResponseDTO = categoryService.insertOrUpdate(categoryDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(categoryDTOResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(categoryResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")

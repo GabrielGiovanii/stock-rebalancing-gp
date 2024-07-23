@@ -39,16 +39,16 @@ public class PortfolioController {
 
     @PostMapping
     public ResponseEntity<PortfolioDTO> insert(@Valid @RequestBody PortfolioDTO portfolioDTO) {
-        PortfolioDTO portfolioDTOResponse = portfolioService.insertOrUpdate(portfolioDTO);
+        PortfolioDTO portfolioResponseDTO = portfolioService.insertOrUpdate(portfolioDTO);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(portfolioDTOResponse);
+        return ResponseEntity.status(HttpStatus.CREATED).body(portfolioResponseDTO);
     }
 
     @PutMapping
     public ResponseEntity<PortfolioDTO> update(@Valid @RequestBody PortfolioDTO portfolioDTO) {
-        PortfolioDTO portfolioDTOResponse = portfolioService.insertOrUpdate(portfolioDTO);
+        PortfolioDTO portfolioResponseDTO = portfolioService.insertOrUpdate(portfolioDTO);
 
-        return ResponseEntity.status(HttpStatus.OK).body(portfolioDTOResponse);
+        return ResponseEntity.status(HttpStatus.OK).body(portfolioResponseDTO);
     }
 
     @DeleteMapping(value = "/{id}")
