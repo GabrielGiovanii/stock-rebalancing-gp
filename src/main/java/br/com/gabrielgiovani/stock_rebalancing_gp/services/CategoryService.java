@@ -4,6 +4,7 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

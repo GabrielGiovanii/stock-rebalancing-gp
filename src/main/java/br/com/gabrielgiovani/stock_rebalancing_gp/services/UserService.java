@@ -3,6 +3,8 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.UserSaveDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.UserRepository;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
