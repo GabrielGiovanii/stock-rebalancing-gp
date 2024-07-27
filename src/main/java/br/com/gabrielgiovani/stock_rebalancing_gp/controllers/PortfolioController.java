@@ -1,12 +1,14 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioResponseDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioSaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.neo4j.Neo4jProperties;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -20,41 +22,57 @@ public class PortfolioController {
     private PortfolioService portfolioService;
 
     @GetMapping
-    public ResponseEntity<List<PortfolioDTO>> findAll() {
-        List<PortfolioDTO> portfoliosDTOs = portfolioService.findAll();
+    public ResponseEntity<List<PortfolioResponseDTO>> findAll(Authentication authentication) {
+        String username = authentication.getName();
 
-        if(!portfoliosDTOs.isEmpty()) {
-            return ResponseEntity.ok().body(portfoliosDTOs);
+        List<Portfolio> portfolios = portfolioService.findAllByUsername(username);
+
+        if(!portfolios.isEmpty()) {
+            return ResponseEntity.ok().body(
+                    portfolios.stream()
+                    .map(PortfolioResponseDTO::new)
+                    .toList()
+            );
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
         }
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PortfolioDTO> findById(@PathVariable Integer id) {
-            Optional<PortfolioDTO> portfolioDTO = portfolioService.findById(id);
+    public ResponseEntity<PortfolioResponseDTO> findById(Authentication authentication, @PathVariable Integer id) {
+        String username = authentication.getName();
 
-            return portfolioDTO.map(value -> ResponseEntity.ok().body(value))
-                    .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+        Optional<Portfolio> portfolio = portfolioService.findByUsernameAndId(username, id);
+
+        return portfolio.map(obj -> ResponseEntity.ok().body(new PortfolioResponseDTO(obj)))
+                .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<PortfolioDTO> insert(@Valid @RequestBody PortfolioDTO portfolioDTO) {
-        PortfolioDTO portfolioResponseDTO = portfolioService.insertOrUpdate(portfolioDTO);
+    public ResponseEntity<PortfolioResponseDTO> insert(Authentication authentication, @Valid @RequestBody PortfolioSaveDTO portfolioSaveDTO) {
+        String username = authentication.getName();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(portfolioResponseDTO);
+        Portfolio portfolio = portfolioService.createEntity(portfolioSaveDTO);
+        portfolio = portfolioService.insertOrUpdate(username, portfolio);
+
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PortfolioResponseDTO(portfolio));
     }
 
     @PutMapping
-    public ResponseEntity<PortfolioDTO> update(@Valid @RequestBody PortfolioDTO portfolioDTO) {
-        PortfolioDTO portfolioResponseDTO = portfolioService.insertOrUpdate(portfolioDTO);
+    public ResponseEntity<PortfolioResponseDTO> update(Authentication authentication, @Valid @RequestBody PortfolioSaveDTO portfolioSaveDTO) {
+        String username = authentication.getName();
 
-        return ResponseEntity.status(HttpStatus.OK).body(portfolioResponseDTO);
+        Portfolio portfolio = portfolioService.createEntity(portfolioSaveDTO);
+        portfolio = portfolioService.insertOrUpdate(username, portfolio);
+
+        return ResponseEntity.status(HttpStatus.OK).body(new PortfolioResponseDTO(portfolio));
     }
 
     @DeleteMapping(value = "/{id}")
-    public ResponseEntity<Void> deleteById(@PathVariable Integer id) {
-        if(portfolioService.wasDeletedById(id)) {
+    public ResponseEntity<Void> deleteById(Authentication authentication, @PathVariable Integer id) {
+        String username = authentication.getName();
+
+        if(portfolioService.wasDeletedById(username, id)) {
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).build();

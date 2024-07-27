@@ -3,14 +3,16 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "category")
+@Table(name = "category", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "portfolio_id"})
+})
 public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(length = 200)

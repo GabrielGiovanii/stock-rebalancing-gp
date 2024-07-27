@@ -22,18 +22,23 @@ public class Portfolio {
     @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
     private Double investmentPercentage;
 
+    @OneToOne
+    @JoinColumn(unique = true, name = "user_id")
+    private User user;
+
     @OneToMany(mappedBy = "portfolio")
-    private List<Category> categories;
+    private final List<Category> categories;
 
     public Portfolio() {
         this.categories = new ArrayList<>();
     }
 
-    public Portfolio(String name, String description, Double investmentPercentage) {
-        this.categories = new ArrayList<>();
+    public Portfolio(String name, String description, Double investmentPercentage, User user) {
         this.name = name;
         this.description = description;
         this.investmentPercentage = investmentPercentage;
+        this.categories = new ArrayList<>();
+        this.user = user;
     }
 
     public Integer getId() {
@@ -66,6 +71,14 @@ public class Portfolio {
 
     public void setInvestmentPercentage(Double investmentPercentage) {
         this.investmentPercentage = investmentPercentage;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public List<Category> getCategories() {

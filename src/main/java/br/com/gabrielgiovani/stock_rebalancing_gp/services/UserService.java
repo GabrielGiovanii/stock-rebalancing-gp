@@ -3,18 +3,18 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.UserSaveDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.UserRepository;
-import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityCreationService;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class UserService implements CRUDService<User>, EntityCreationService<User, UserSaveDTO> {
+public class UserService implements EntityCreationService<User, UserSaveDTO> {
 
     @Autowired
     private UserRepository userRepository;
@@ -22,46 +22,53 @@ public class UserService implements CRUDService<User>, EntityCreationService<Use
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Override
-    public List<User> findAll() {
-        return null;
-    }
-
-    @Override
-    public List<User> findByFilters(Map<String, Object> filters) {
-        return null;
-    }
-
-    @Override
-    public Optional<User> findById(Integer id) {
-        return Optional.empty();
-    }
-
-    @Override
     public Optional<User> findByName(String name) {
         return userRepository.findByUsername(name);
     }
 
-    @Override
-    public User insertOrUpdate(User entity) {
+    public User insert(User entity) {
         return userRepository.save(entity);
     }
 
-    @Override
-    public Boolean wasDeletedById(Integer id) {
-        return null;
+    public User update(String username, User entity) {
+        validateEntityForUpdate(username, entity);
+
+        return userRepository.save(entity);
     }
 
-    @Override
     public void saveAll(List<User> entities) {
+        entities.forEach(this::encryptPassword);
+
+        userRepository.saveAll(entities);
+    }
+
+    public void encryptPassword(User user) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+    }
+
+    public void validateEntityForUpdate(String username, User entity) {
+        boolean entityNotFound = false;
+
+        Optional<User> user = userRepository.findByUsername(username);
+
+        if(user.isPresent()) {
+            entityNotFound = !Objects.equals(user.get().getId(), entity.getId());
+        }
+
+        if(entityNotFound) {
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override
     public User createEntity(UserSaveDTO dto) {
         User user = new User();
+        user.setId(dto.getId());
         user.setUsername(dto.getUsername());
-        user.setPassword(passwordEncoder.encode(dto.getPassword()));
+        user.setPassword(dto.getPassword());
         user.setFullName(dto.getFullName());
+
+        encryptPassword(user);
 
         return user;
     }

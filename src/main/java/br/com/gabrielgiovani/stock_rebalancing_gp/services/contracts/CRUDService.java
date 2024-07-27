@@ -6,17 +6,17 @@ import java.util.Optional;
 
 public interface CRUDService<T> {
 
-    List<T> findAll();
+    List<T> findAllByUsername(String username);
 
-    List<T> findByFilters(Map<String, Object> filters);
+    List<T> findByUsernameAndFilters(String username, Map<String, Object> filters);
 
-    Optional<T> findById(Integer id);
+    Optional<T> findByUsernameAndId(String username, Integer id);
 
-    Optional<T> findByName(String name);
+    T insertOrUpdate(String username, T entity);
 
-    T insertOrUpdate(T entity);
+    Boolean wasDeletedById(String username, Integer id);
 
-    Boolean wasDeletedById(Integer id);
+    void saveAll(String username, List<T> entities);
 
-    void saveAll(List<T> entities);
+    void validateEntityRelationshipForInsertOrDelete(String username, Object object);
 }

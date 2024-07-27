@@ -1,14 +1,11 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.dtos;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import jakarta.validation.constraints.*;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Objects;
 
-public class PortfolioDTO {
+public class PortfolioSaveDTO {
 
     private Integer id;
 
@@ -24,26 +21,25 @@ public class PortfolioDTO {
     @DecimalMax(value =  "100.00", message = "{validation.decimalmax}")
     private Double investmentPercentage;
 
-    private List<Integer> categoriesIds;
+    @NotNull(message = "{notBlank.must.not.be.blank}")
+    private Integer userId;
 
-    public PortfolioDTO() {
-        this.categoriesIds = new ArrayList<>();
+    public PortfolioSaveDTO() {
     }
 
-    public PortfolioDTO(Portfolio portfolio) {
+    public PortfolioSaveDTO(Portfolio portfolio) {
         this.id = portfolio.getId();
         this.name = portfolio.getName();
         this.description = portfolio.getDescription();
         this.investmentPercentage = portfolio.getInvestmentPercentage();
-
-        this.categoriesIds = new ArrayList<>();
+        this.userId = Objects.nonNull(portfolio.getUser()) ? portfolio.getUser().getId() : null;
     }
 
     public Integer getId() {
         return id;
     }
 
-    public PortfolioDTO setId(Integer id) {
+    public PortfolioSaveDTO setId(Integer id) {
         this.id = id;
         return this;
     }
@@ -52,7 +48,7 @@ public class PortfolioDTO {
         return name;
     }
 
-    public PortfolioDTO setName(String name) {
+    public PortfolioSaveDTO setName(String name) {
         this.name = name;
         return this;
     }
@@ -61,7 +57,7 @@ public class PortfolioDTO {
         return description;
     }
 
-    public PortfolioDTO setDescription(String description) {
+    public PortfolioSaveDTO setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -74,7 +70,11 @@ public class PortfolioDTO {
         this.investmentPercentage = investmentPercentage;
     }
 
-    public List<Integer> getCategoriesIds() {
-        return categoriesIds;
+    public Integer getUserId() {
+        return userId;
+    }
+
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
 }

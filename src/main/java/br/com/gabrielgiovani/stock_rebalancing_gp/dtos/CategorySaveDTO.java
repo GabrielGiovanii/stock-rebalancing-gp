@@ -3,7 +3,7 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.dtos;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import jakarta.validation.constraints.*;
 
-public class CategoryDTO {
+public class CategorySaveDTO {
 
     private Integer id;
 
@@ -22,10 +22,10 @@ public class CategoryDTO {
     @NotNull(message = "{notBlank.must.not.be.blank}")
     private Integer portfolioId;
 
-    public CategoryDTO() {
+    public CategorySaveDTO() {
     }
 
-    public CategoryDTO(Category category) {
+    public CategorySaveDTO(Category category) {
         this.id = category.getId();
         this.name = category.getName();
         this.description = category.getDescription();

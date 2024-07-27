@@ -1,20 +1,25 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.controllers.exceptions.EntityRelationshipNotFoundException;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategorySaveDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityCreationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service
-public class CategoryService implements CRUDService<CategoryDTO> {
+public class CategoryService implements CRUDService<Category>,
+        EntityCreationService<Category, CategorySaveDTO> {
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private PortfolioService portfolioService;
@@ -23,46 +28,31 @@ public class CategoryService implements CRUDService<CategoryDTO> {
     private CategoryRepository categoryRepository;
 
     @Override
-    public List<CategoryDTO> findAll() {
-        List<Category> categories = categoryRepository.findAll();
-        return categories.stream().map(CategoryDTO::new).collect(Collectors.toList());
+    public List<Category> findAllByUsername(String username) {
+        return categoryRepository.findAllByUsername(username);
     }
 
     @Override
-    public List<CategoryDTO> findByFilters(Map<String, Object> filters) {
+    public List<Category> findByUsernameAndFilters(String username, Map<String, Object> filters) {
         return null;
     }
 
     @Override
-    public Optional<CategoryDTO> findById(Integer id) {
-        return categoryRepository.findById(id).map(CategoryDTO::new);
+    public Optional<Category> findByUsernameAndId(String username, Integer id) {
+        return categoryRepository.findByUsernameAndId(username, id);
     }
 
     @Override
-    public Optional<CategoryDTO> findByName(String name) {
-        return Optional.empty();
+    public Category insertOrUpdate(String username, Category entity) {
+        validateEntityRelationshipForInsertOrDelete(username, entity);
+
+        return categoryRepository.save(entity);
     }
 
     @Override
-    public CategoryDTO insertOrUpdate(CategoryDTO entity) {
-        Category category = new Category();
-        category.setId(entity.getId());
-        category.setName(entity.getName());
-        category.setDescription(entity.getDescription());
-        category.setPercentageUnderPortfolio(entity.getPercentageUnderPortfolio());
-
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(entity.getPortfolioId());
-
-        category.setPortfolio(portfolio);
-        portfolio.getCategories().add(category);
-
-        return new CategoryDTO(categoryRepository.save(category));
-    }
-
-    @Override
-    public Boolean wasDeletedById(Integer id) {
+    public Boolean wasDeletedById(String username, Integer id) {
         if(categoryRepository.existsById(id)) {
+            validateEntityRelationshipForInsertOrDelete(username, id);
             categoryRepository.deleteById(id);
 
             return true;
@@ -72,6 +62,42 @@ public class CategoryService implements CRUDService<CategoryDTO> {
     }
 
     @Override
-    public void saveAll(List<CategoryDTO> entities) {
+    public void saveAll(String username, List<Category> entities) {
+    }
+
+    @Override
+    public void validateEntityRelationshipForInsertOrDelete(String username, Object object) {
+        boolean hasEntityRelationshipIssue = false;
+
+        if(object instanceof Category category) {
+            Optional<Portfolio> portfolio = portfolioService.findByUsernameAndId(username, category.getPortfolio().getId());
+
+            hasEntityRelationshipIssue = portfolio.isEmpty();
+        } else if(object instanceof Integer integer) {
+            Optional<Category> category = categoryRepository.findByUsernameAndId(username, integer);
+
+            hasEntityRelationshipIssue = category.isEmpty();
+        }
+
+        if(hasEntityRelationshipIssue) {
+            throw new EntityRelationshipNotFoundException();
+        }
+    }
+
+    @Override
+    public Category createEntity(CategorySaveDTO dto) {
+        Category category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(dto.getPortfolioId());
+
+        category.setPortfolio(portfolio);
+        portfolio.getCategories().add(category);
+
+        return category;
     }
 }

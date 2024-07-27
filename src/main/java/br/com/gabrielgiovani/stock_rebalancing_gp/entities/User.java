@@ -3,7 +3,7 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "APP_USER")
+@Table(name = "app_user")
 public class User {
 
     @Id
@@ -18,6 +18,9 @@ public class User {
 
     @Column(length = 200, nullable = false)
     private String fullName;
+
+    @OneToOne(mappedBy = "user")
+    private Portfolio portfolio;
 
     public User() {
     }
@@ -58,5 +61,13 @@ public class User {
 
     public void setFullName(String fullName) {
         this.fullName = fullName;
+    }
+
+    public Portfolio getPortfolio() {
+        return portfolio;
+    }
+
+    public void setPortfolio(Portfolio portfolio) {
+        this.portfolio = portfolio;
     }
 }
