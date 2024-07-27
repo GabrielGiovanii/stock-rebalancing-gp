@@ -1,5 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers.exceptions;
 
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -44,9 +45,21 @@ public class ResourceExceptionHandler {
         return errors;
     }
 
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ExceptionHandler(value = {
+            EntityNotFoundException.class,
+            EntityRelationshipNotFoundException.class
+    })
+    public ResponseEntity<String> entityRelationshipNotFound(Exception e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(e.getClass().getSimpleName());
+    }
+
+    @ExceptionHandler(SecurityException.class)
+    public ResponseEntity<String> unauthorizedInteraction(SecurityException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(e.getClass().getSimpleName());
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<String> internalServerError(Exception e) {
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass().getName());
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getClass().getSimpleName());
     }
 }
