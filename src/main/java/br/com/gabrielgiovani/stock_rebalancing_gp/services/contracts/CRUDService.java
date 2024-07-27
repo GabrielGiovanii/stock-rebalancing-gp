@@ -18,5 +18,5 @@ public interface CRUDService<T> {
 
     void saveAll(String username, List<T> entities);
 
-    void validateEntityRelationshipForInsertOrDelete(String username, Object object);
+    void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object);
 }

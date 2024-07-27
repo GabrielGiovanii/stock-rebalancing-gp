@@ -42,7 +42,7 @@ public class PortfolioService implements CRUDService<Portfolio>,
 
     @Override
     public Portfolio insertOrUpdate(String username, Portfolio entity) {
-        validateEntityRelationshipForInsertOrDelete(username, entity);
+        validateEntityRelationshipForInsertOrUpdateOrDelete(username, entity);
 
         return portfolioRepository.save(entity);
     }
@@ -50,7 +50,7 @@ public class PortfolioService implements CRUDService<Portfolio>,
     @Override
     public Boolean wasDeletedById(String username, Integer id) {
         if(portfolioRepository.existsById(id)) {
-            validateEntityRelationshipForInsertOrDelete(username, id);
+            validateEntityRelationshipForInsertOrUpdateOrDelete(username, id);
             portfolioRepository.deleteById(id);
 
             return true;
@@ -64,7 +64,7 @@ public class PortfolioService implements CRUDService<Portfolio>,
     }
 
     @Override
-    public void validateEntityRelationshipForInsertOrDelete(String username, Object object) {
+    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         Optional<User> user = userService.findByName(username);

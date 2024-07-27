@@ -44,7 +44,7 @@ public class CategoryService implements CRUDService<Category>,
 
     @Override
     public Category insertOrUpdate(String username, Category entity) {
-        validateEntityRelationshipForInsertOrDelete(username, entity);
+        validateEntityRelationshipForInsertOrUpdateOrDelete(username, entity);
 
         return categoryRepository.save(entity);
     }
@@ -52,7 +52,7 @@ public class CategoryService implements CRUDService<Category>,
     @Override
     public Boolean wasDeletedById(String username, Integer id) {
         if(categoryRepository.existsById(id)) {
-            validateEntityRelationshipForInsertOrDelete(username, id);
+            validateEntityRelationshipForInsertOrUpdateOrDelete(username, id);
             categoryRepository.deleteById(id);
 
             return true;
@@ -66,7 +66,7 @@ public class CategoryService implements CRUDService<Category>,
     }
 
     @Override
-    public void validateEntityRelationshipForInsertOrDelete(String username, Object object) {
+    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         if(object instanceof Category category) {
