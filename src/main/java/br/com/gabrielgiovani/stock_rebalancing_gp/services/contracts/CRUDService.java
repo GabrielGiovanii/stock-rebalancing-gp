@@ -17,6 +17,4 @@ public interface CRUDService<T> {
     Boolean wasDeletedById(String username, Integer id);
 
     void saveAll(String username, List<T> entities);
-
-    void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object);
 }

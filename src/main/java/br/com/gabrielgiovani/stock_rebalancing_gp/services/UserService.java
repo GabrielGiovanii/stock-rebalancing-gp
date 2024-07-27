@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -21,6 +20,19 @@ public class UserService implements EntityCreationService<User, UserSaveDTO> {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+
+    @Override
+    public User createEntity(UserSaveDTO dto) {
+        User user = new User();
+        user.setId(dto.getId());
+        user.setUsername(dto.getUsername());
+        user.setPassword(dto.getPassword());
+        user.setFullName(dto.getFullName());
+
+        encryptPassword(user);
+
+        return user;
+    }
 
     public Optional<User> findByName(String name) {
         return userRepository.findByUsername(name);
@@ -36,17 +48,11 @@ public class UserService implements EntityCreationService<User, UserSaveDTO> {
         return userRepository.save(entity);
     }
 
-    public void saveAll(List<User> entities) {
-        entities.forEach(this::encryptPassword);
-
-        userRepository.saveAll(entities);
-    }
-
     public void encryptPassword(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
     }
 
-    public void validateEntityForUpdate(String username, User entity) {
+    private void validateEntityForUpdate(String username, User entity) {
         boolean entityNotFound = false;
 
         Optional<User> user = userRepository.findByUsername(username);
@@ -58,18 +64,5 @@ public class UserService implements EntityCreationService<User, UserSaveDTO> {
         if(entityNotFound) {
             throw new EntityNotFoundException();
         }
-    }
-
-    @Override
-    public User createEntity(UserSaveDTO dto) {
-        User user = new User();
-        user.setId(dto.getId());
-        user.setUsername(dto.getUsername());
-        user.setPassword(dto.getPassword());
-        user.setFullName(dto.getFullName());
-
-        encryptPassword(user);
-
-        return user;
     }
 }

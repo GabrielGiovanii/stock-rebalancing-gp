@@ -64,7 +64,23 @@ public class PortfolioService implements CRUDService<Portfolio>,
     }
 
     @Override
-    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
+    public Portfolio createEntity(PortfolioSaveDTO dto) {
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(dto.getId());
+        portfolio.setName(dto.getName());
+        portfolio.setDescription(dto.getDescription());
+        portfolio.setInvestmentPercentage(dto.getInvestmentPercentage());
+
+        User user = new User();
+        user.setId(dto.getUserId());
+
+        portfolio.setUser(user);
+        user.setPortfolio(portfolio);
+
+        return portfolio;
+    }
+
+    private void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         Optional<User> user = userService.findByName(username);
@@ -82,22 +98,5 @@ public class PortfolioService implements CRUDService<Portfolio>,
         if(hasEntityRelationshipIssue) {
             throw new EntityRelationshipNotFoundException();
         }
-    }
-
-    @Override
-    public Portfolio createEntity(PortfolioSaveDTO dto) {
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(dto.getId());
-        portfolio.setName(dto.getName());
-        portfolio.setDescription(dto.getDescription());
-        portfolio.setInvestmentPercentage(dto.getInvestmentPercentage());
-
-        User user = new User();
-        user.setId(dto.getUserId());
-
-        portfolio.setUser(user);
-        user.setPortfolio(portfolio);
-
-        return portfolio;
     }
 }

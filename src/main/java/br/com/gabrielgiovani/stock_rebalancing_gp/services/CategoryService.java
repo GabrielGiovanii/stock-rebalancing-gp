@@ -66,7 +66,23 @@ public class CategoryService implements CRUDService<Category>,
     }
 
     @Override
-    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
+    public Category createEntity(CategorySaveDTO dto) {
+        Category category = new Category();
+        category.setId(dto.getId());
+        category.setName(dto.getName());
+        category.setDescription(dto.getDescription());
+        category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
+
+        Portfolio portfolio = new Portfolio();
+        portfolio.setId(dto.getPortfolioId());
+
+        category.setPortfolio(portfolio);
+        portfolio.getCategories().add(category);
+
+        return category;
+    }
+
+    private void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         if(object instanceof Category category) {
@@ -82,22 +98,5 @@ public class CategoryService implements CRUDService<Category>,
         if(hasEntityRelationshipIssue) {
             throw new EntityRelationshipNotFoundException();
         }
-    }
-
-    @Override
-    public Category createEntity(CategorySaveDTO dto) {
-        Category category = new Category();
-        category.setId(dto.getId());
-        category.setName(dto.getName());
-        category.setDescription(dto.getDescription());
-        category.setPercentageUnderPortfolio(dto.getPercentageUnderPortfolio());
-
-        Portfolio portfolio = new Portfolio();
-        portfolio.setId(dto.getPortfolioId());
-
-        category.setPortfolio(portfolio);
-        portfolio.getCategories().add(category);
-
-        return category;
     }
 }
