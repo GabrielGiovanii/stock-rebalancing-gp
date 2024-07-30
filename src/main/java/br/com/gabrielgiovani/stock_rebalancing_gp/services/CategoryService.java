@@ -88,7 +88,11 @@ public class CategoryService implements CRUDService<Category>,
         if(object instanceof Category category) {
             Optional<Portfolio> portfolio = portfolioService.findByUsernameAndId(username, category.getPortfolio().getId());
 
-            hasEntityRelationshipIssue = portfolio.isEmpty();
+            if(portfolio.isPresent()) {
+                category.setPortfolio(portfolio.get());
+            } else {
+                hasEntityRelationshipIssue = true;
+            }
         } else if(object instanceof Integer integer) {
             Optional<Category> category = categoryRepository.findByUsernameAndId(username, integer);
 
