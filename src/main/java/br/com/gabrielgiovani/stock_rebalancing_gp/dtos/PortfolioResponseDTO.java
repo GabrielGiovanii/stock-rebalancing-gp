@@ -2,6 +2,8 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.dtos;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 
+import java.util.Objects;
+
 public class PortfolioResponseDTO {
 
     private Integer id;
@@ -17,6 +19,13 @@ public class PortfolioResponseDTO {
         this.name = portfolio.getName();
         this.description = portfolio.getDescription();
         this.investmentPercentage = portfolio.getInvestmentPercentage();
+    }
+
+    public PortfolioResponseDTO(PortfolioSaveDTO portfolioSaveDTO) {
+        this.id = portfolioSaveDTO.getId();
+        this.name = portfolioSaveDTO.getName();
+        this.description = portfolioSaveDTO.getDescription();
+        this.investmentPercentage = portfolioSaveDTO.getInvestmentPercentage();
     }
 
     public Integer getId() {
@@ -49,5 +58,23 @@ public class PortfolioResponseDTO {
 
     public void setInvestmentPercentage(Double investmentPercentage) {
         this.investmentPercentage = investmentPercentage;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        PortfolioResponseDTO that = (PortfolioResponseDTO) object;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(investmentPercentage, that.investmentPercentage);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(name);
+        result = 31 * result + Objects.hashCode(description);
+        result = 31 * result + Objects.hashCode(investmentPercentage);
+        return result;
     }
 }

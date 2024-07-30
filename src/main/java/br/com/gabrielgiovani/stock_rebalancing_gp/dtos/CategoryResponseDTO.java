@@ -2,6 +2,8 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.dtos;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 
+import java.util.Objects;
+
 public class CategoryResponseDTO {
 
     private Integer id;
@@ -20,6 +22,15 @@ public class CategoryResponseDTO {
         this.description = category.getDescription();
         this.percentageUnderPortfolio = category.getPercentageUnderPortfolio();
         this.portfolioResponseDTO = new PortfolioResponseDTO(category.getPortfolio());
+    }
+
+    public CategoryResponseDTO(CategorySaveDTO categorySaveDTO) {
+        this.id = categorySaveDTO.getId();
+        this.name = categorySaveDTO.getName();
+        this.description = categorySaveDTO.getDescription();
+        this.percentageUnderPortfolio = categorySaveDTO.getPercentageUnderPortfolio();
+        this.portfolioResponseDTO = new PortfolioResponseDTO();
+        this.portfolioResponseDTO.setId(categorySaveDTO.getPortfolioId());
     }
 
     public Integer getId() {
@@ -60,5 +71,23 @@ public class CategoryResponseDTO {
 
     public void setPortfolioResponseDTO(PortfolioResponseDTO portfolioResponseDTO) {
         this.portfolioResponseDTO = portfolioResponseDTO;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        CategoryResponseDTO that = (CategoryResponseDTO) object;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(description, that.description) && Objects.equals(percentageUnderPortfolio, that.percentageUnderPortfolio);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(name);
+        result = 31 * result + Objects.hashCode(description);
+        result = 31 * result + Objects.hashCode(percentageUnderPortfolio);
+        return result;
     }
 }

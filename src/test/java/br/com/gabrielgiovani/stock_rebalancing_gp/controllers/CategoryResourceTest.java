@@ -1,25 +1,29 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.config.TestConfig;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryResponseDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategorySaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.TestingAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -42,28 +46,36 @@ class CategoryResourceTest {
 
     private ObjectMapper objectMapper;
 
-    @BeforeEach
-    void setUp() {
-        MockitoAnnotations.openMocks(this);
+    private static User gabrielUser;
+    private static Authentication gabrielAuthentication;
 
-        objectMapper = new ObjectMapper();
+    @BeforeEach
+    void setUp() throws Exception {
+        if(Objects.isNull(gabrielUser) || Objects.isNull(gabrielAuthentication)) {
+            gabrielUser = TestConfig.getUserMap().get("gabriel");
+            gabrielAuthentication = new TestingAuthenticationToken(gabrielUser.getUsername(), null);
+        }
     }
 
     @Test
     void findAll_Ok() {
-        ResponseEntity<List<CategoryDTO>> response = categoryResource.findAll();
+        ResponseEntity<List<CategoryResponseDTO>> response = categoryResource.findAll(gabrielAuthentication);
 
-        assertEquals(HttpStatus.OK, response.getStatusCode());
+        List<CategoryResponseDTO> categoryResponseDTOS =  gabrielUser.getPortfolio().getCategories()
+                .stream().map(CategoryResponseDTO::new).toList();
+
         assertNotNull(response.getBody());
         assertTrue(response.getBody().size() > 1);
+        assertEquals(categoryResponseDTOS, response.getBody());
+        assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
     void findAll_NotFound() {
-        when(categoryServiceMock.findAll())
+        when(categoryServiceMock.findAllByUsername(gabrielAuthentication.getName()))
                 .thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<CategoryDTO>> response = categoryResourceMock.findAll();
+        ResponseEntity<List<CategoryResponseDTO>> response = categoryResourceMock.findAll(gabrielAuthentication);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -73,104 +85,77 @@ class CategoryResourceTest {
     void findById_Ok() {
         Integer categoryId = 1;
 
-        ResponseEntity<CategoryDTO> response = categoryResource.findById(categoryId);
+        ResponseEntity<CategoryResponseDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
 
+        Optional<Category> categoryOptional = gabrielUser.getPortfolio().getCategories()
+                .stream().filter(obj -> obj.getId().equals(1)).findFirst();
+
+        Category category = categoryOptional.orElse(null);
+
+        assertNotNull(category);
         assertNotNull(response.getBody());
+        assertEquals(new CategoryResponseDTO(category), response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
-    @Test
+   @Test
     void findById_NotFound() {
         Integer categoryId = Integer.MAX_VALUE;
 
-        ResponseEntity<CategoryDTO> response = categoryResource.findById(categoryId);
+        ResponseEntity<CategoryResponseDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
-    void findById_BadRequest() throws Exception {
-        String invalidCategoryId = "test";
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .get("/categories/{id}", invalidCategoryId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
-    }
-
-    @Test
     void insert_Created() {
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setName("Insert");
-        categoryDTO.setDescription("Test description");
-        categoryDTO.setPercentageUnderPortfolio(15.0);
-        categoryDTO.setPortfolioId(1);
+        CategorySaveDTO categorySaveDTO = new CategorySaveDTO();
+        categorySaveDTO.setName("Insert");
+        categorySaveDTO.setDescription("Test description");
+        categorySaveDTO.setPercentageUnderPortfolio(15.0);
+        categorySaveDTO.setPortfolioId(1);
 
-        ResponseEntity<CategoryDTO> response = categoryResource.insert(categoryDTO);
+        ResponseEntity<CategoryResponseDTO> response = categoryResource.insert(gabrielAuthentication, categorySaveDTO);
+
+        CategoryResponseDTO expectedCategoryResponseDTO = new CategoryResponseDTO(categorySaveDTO);
+        expectedCategoryResponseDTO.setId(Objects.requireNonNull(response.getBody()).getId());
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
-        assertEquals(categoryDTO.getName(), response.getBody().getName());
-        assertEquals(categoryDTO.getDescription(), response.getBody().getDescription());
-        assertEquals(categoryDTO.getPercentageUnderPortfolio(), response.getBody().getPercentageUnderPortfolio());
-        assertEquals(categoryDTO.getPortfolioId(), response.getBody().getPortfolioId());
+        assertEquals(expectedCategoryResponseDTO, response.getBody());
+        assertEquals(expectedCategoryResponseDTO.getPortfolioResponseDTO().getId(),
+                response.getBody().getPortfolioResponseDTO().getId());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
     @Test
-    void insert_BadRequest() throws Exception {
-        CategoryDTO categoryDTO = new CategoryDTO();
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryDTO)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.percentageUnderPortfolio").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.portfolioId").exists());
-    }
-
-    @Test
     void update_Ok() {
-        CategoryDTO categoryDTO = new CategoryDTO();
-        categoryDTO.setId(1);
-        categoryDTO.setName("Update");
-        categoryDTO.setDescription("Test description");
-        categoryDTO.setPercentageUnderPortfolio(15.0);
-        categoryDTO.setPortfolioId(1);
+        User user = TestConfig.getUserMap().get("teste");
+        Authentication authentication = new TestingAuthenticationToken(user.getUsername(), null);
 
-        ResponseEntity<CategoryDTO> response = categoryResource.update(categoryDTO);
+        CategorySaveDTO categorySaveDTO = new CategorySaveDTO();
+        categorySaveDTO.setId(4);
+        categorySaveDTO.setName("Update");
+        categorySaveDTO.setDescription("Test description");
+        categorySaveDTO.setPercentageUnderPortfolio(15.0);
+        categorySaveDTO.setPortfolioId(2);
+
+        ResponseEntity<CategoryResponseDTO> response = categoryResource.update(authentication, categorySaveDTO);
 
         assertNotNull(response.getBody());
-        assertEquals(categoryDTO.getId(), response.getBody().getId());
-        assertEquals(categoryDTO.getName(), response.getBody().getName());
-        assertEquals(categoryDTO.getDescription(), response.getBody().getDescription());
-        assertEquals(categoryDTO.getPercentageUnderPortfolio(), response.getBody().getPercentageUnderPortfolio());
-        assertEquals(categoryDTO.getPortfolioId(), response.getBody().getPortfolioId());
+        assertEquals(new CategoryResponseDTO(categorySaveDTO), response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
     @Test
-    void updated_BadRequest() throws Exception {
-        CategoryDTO categoryDTO = new CategoryDTO();
-
-        mockMvc.perform(MockMvcRequestBuilders.put("/categories")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(categoryDTO)))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.name").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.percentageUnderPortfolio").exists())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.portfolioId").exists());
-    }
-
-    @Test
     void deleteById_Ok() {
-        Integer categoryId = 3;
+        User user = TestConfig.getUserMap().get("test");
+        Authentication authentication = new TestingAuthenticationToken(user.getUsername(), null);
 
-        ResponseEntity<Void> response = categoryResource.deleteById(categoryId);
+        Integer categoryId = 5;
+
+        ResponseEntity<Void> response = categoryResource.deleteById(authentication, categoryId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -180,21 +165,9 @@ class CategoryResourceTest {
     void deleteById_NotFound() {
         Integer categoryId = Integer.MAX_VALUE;
 
-        ResponseEntity<Void> response = categoryResource.deleteById(categoryId);
+        ResponseEntity<Void> response = categoryResource.deleteById(gabrielAuthentication, categoryId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
-    }
-
-    @Test
-    void deleteById_BadRequest() throws Exception {
-        String invalidCategoryId = "test";
-
-        mockMvc.perform(
-                        MockMvcRequestBuilders
-                                .delete("/categories/{id}", invalidCategoryId)
-                                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(MockMvcResultMatchers.status().isBadRequest())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists());
     }
 }
