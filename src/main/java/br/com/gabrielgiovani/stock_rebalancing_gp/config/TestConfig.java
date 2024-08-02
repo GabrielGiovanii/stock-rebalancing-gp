@@ -1,8 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.config;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.*;
+import br.com.gabrielgiovani.stock_rebalancing_gp.enums.SectorNature;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -67,6 +66,28 @@ public class TestConfig implements CommandLineRunner {
         p3.getCategories().add(c5);
         Arrays.asList(c1, c2, c3, c4).forEach(obj -> categoryMap.put(obj.getName(), obj));
         testService.saveAllCategories(Arrays.asList(c1, c2, c3, c4, c5));
+
+        Sector s1 = new Sector("Bancos", "Banqueiros", SectorNature.NON_CYCLICAL);
+        Sector s2 = new Sector("Holding", "Misto de empresas", SectorNature.CYCLICAL);
+        Sector s3 = new Sector("Construção Civíl", "Misto de projetos", SectorNature.CYCLICAL);
+        Sector s4 = new Sector("Varejo", "Quebradeira é certa", SectorNature.CYCLICAL);
+
+        CategorySector cs1 = new CategorySector(c1, s1, 10.0);
+        CategorySector cs2 = new CategorySector(c1, s2, 5.0);
+        CategorySector cs3 = new CategorySector(c1, s3, 8.0);
+        CategorySector cs4 = new CategorySector(c4, s4, 6.0);
+
+        s1.getCategoriesSector().add(cs1);
+        s2.getCategoriesSector().add(cs2);
+        s3.getCategoriesSector().add(cs3);
+        s4.getCategoriesSector().add(cs4);
+        c1.getCategorySectors().add(cs1);
+        c1.getCategorySectors().add(cs2);
+        c1.getCategorySectors().add(cs3);
+        c4.getCategorySectors().add(cs4);
+
+        testService.saveAllSector(Arrays.asList(s1, s2, s3, s4));
+        testService.saveAllCategorySector(Arrays.asList(cs1, cs2, cs3, cs4));
     }
 
     public static Map<String, User> getUserMap() {

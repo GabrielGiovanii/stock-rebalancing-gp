@@ -1,11 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
-import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
-import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
-import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.PortfolioRepository;
-import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.UserRepository;
+import br.com.gabrielgiovani.stock_rebalancing_gp.entities.*;
+import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
@@ -28,6 +24,12 @@ public class TestService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private SectorRepository sectorRepository;
+
+    @Autowired
+    private CategorySectorRepository categorySectorRepository;
+
     public void saveAllUsers(List<User> entities) {
         entities.forEach(obj -> userService.encryptPassword(obj));
 
@@ -40,5 +42,13 @@ public class TestService {
 
     public void saveAllCategories(List<Category> entities) {
         categoryRepository.saveAll(entities);
+    }
+
+    public void saveAllSector(List<Sector> entities) {
+        sectorRepository.saveAll(entities);
+    }
+
+    public void saveAllCategorySector(List<CategorySector> entities) {
+        categorySectorRepository.saveAll(entities);
     }
 }
