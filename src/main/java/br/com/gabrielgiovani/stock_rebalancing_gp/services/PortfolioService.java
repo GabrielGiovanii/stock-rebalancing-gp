@@ -77,7 +77,8 @@ public class PortfolioService implements CRUDService<Portfolio, Integer>,
         return portfolio;
     }
 
-    private void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
+    @Override
+    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         Optional<User> user = userService.findByName(username);

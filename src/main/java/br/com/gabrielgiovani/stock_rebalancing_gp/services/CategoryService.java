@@ -77,7 +77,8 @@ public class CategoryService implements CRUDService<Category, Integer>,
         return category;
     }
 
-    private void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
+    @Override
+    public void validateEntityRelationshipForInsertOrUpdateOrDelete(String username, Object object) {
         boolean hasEntityRelationshipIssue = false;
 
         if(object instanceof Category category) {
