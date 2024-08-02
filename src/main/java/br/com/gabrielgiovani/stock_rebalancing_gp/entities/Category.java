@@ -2,6 +2,9 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "category", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"name", "portfolio_id"})
@@ -25,7 +28,11 @@ public class Category {
     @JoinColumn(name = "portfolio_id", nullable = false)
     private Portfolio portfolio;
 
+    @OneToMany(mappedBy = "id.category")
+    private final Set<CategorySector> categorySectors;
+
     public Category() {
+        this.categorySectors = new HashSet<>();
     }
 
     public Category(String name, String description, Double percentageUnderPortfolio, Portfolio portfolio) {
@@ -33,6 +40,7 @@ public class Category {
         this.description = description;
         this.percentageUnderPortfolio = percentageUnderPortfolio;
         this.portfolio = portfolio;
+        this.categorySectors = new HashSet<>();
     }
 
     public Integer getId() {
@@ -73,5 +81,9 @@ public class Category {
 
     public void setPortfolio(Portfolio portfolio) {
         this.portfolio = portfolio;
+    }
+
+    public Set<CategorySector> getCategorySectors() {
+        return categorySectors;
     }
 }

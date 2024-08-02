@@ -2,8 +2,8 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import jakarta.persistence.*;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "portfolio")
@@ -27,17 +27,17 @@ public class Portfolio {
     private User user;
 
     @OneToMany(mappedBy = "portfolio")
-    private final List<Category> categories;
+    private final Set<Category> categories;
 
     public Portfolio() {
-        this.categories = new ArrayList<>();
+        this.categories = new HashSet<>();
     }
 
     public Portfolio(String name, String description, Double investmentPercentage, User user) {
         this.name = name;
         this.description = description;
         this.investmentPercentage = investmentPercentage;
-        this.categories = new ArrayList<>();
+        this.categories = new HashSet<>();
         this.user = user;
     }
 
@@ -81,7 +81,7 @@ public class Portfolio {
         this.user = user;
     }
 
-    public List<Category> getCategories() {
+    public Set<Category> getCategories() {
         return categories;
     }
 }
