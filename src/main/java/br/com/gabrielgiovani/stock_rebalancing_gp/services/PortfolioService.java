@@ -7,6 +7,7 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.PortfolioRepository;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityCreationService;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityRelationshipValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,8 +17,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 @Service
-public class PortfolioService implements CRUDService<Portfolio>,
-        EntityCreationService<Portfolio, PortfolioSaveDTO> {
+public class PortfolioService implements CRUDService<Portfolio, Integer>,
+        EntityCreationService<Portfolio, PortfolioSaveDTO>, EntityRelationshipValidator {
 
     @Autowired
     private UserService userService;
@@ -57,10 +58,6 @@ public class PortfolioService implements CRUDService<Portfolio>,
         } else {
             return false;
         }
-    }
-
-    @Override
-    public void saveAll(String username, List<Portfolio> entities) {
     }
 
     @Override

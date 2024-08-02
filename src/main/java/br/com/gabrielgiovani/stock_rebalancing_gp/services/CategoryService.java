@@ -5,8 +5,7 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategorySaveDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
-import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.CRUDService;
-import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.EntityCreationService;
+import br.com.gabrielgiovani.stock_rebalancing_gp.services.contracts.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +14,8 @@ import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class CategoryService implements CRUDService<Category>,
-        EntityCreationService<Category, CategorySaveDTO> {
+public class CategoryService implements CRUDService<Category, Integer>,
+        EntityCreationService<Category, CategorySaveDTO>, EntityRelationshipValidator {
 
     @Autowired
     private UserService userService;
@@ -59,10 +58,6 @@ public class CategoryService implements CRUDService<Category>,
         } else {
             return false;
         }
-    }
-
-    @Override
-    public void saveAll(String username, List<Category> entities) {
     }
 
     @Override
