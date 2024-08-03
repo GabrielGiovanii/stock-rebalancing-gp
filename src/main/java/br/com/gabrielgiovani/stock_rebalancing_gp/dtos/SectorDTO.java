@@ -1,11 +1,12 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.dtos;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Sector;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -75,5 +76,24 @@ public class SectorDTO {
 
     public Set<Integer> getCategoryIds() {
         return categoryIds;
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (this == object) return true;
+        if (object == null || getClass() != object.getClass()) return false;
+
+        SectorDTO sectorDTO = (SectorDTO) object;
+        return Objects.equals(id, sectorDTO.id) && Objects.equals(name, sectorDTO.name) && Objects.equals(description, sectorDTO.description) && Objects.equals(sectorNatureCode, sectorDTO.sectorNatureCode) && categoryIds.equals(sectorDTO.categoryIds);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hashCode(id);
+        result = 31 * result + Objects.hashCode(name);
+        result = 31 * result + Objects.hashCode(description);
+        result = 31 * result + Objects.hashCode(sectorNatureCode);
+        result = 31 * result + categoryIds.hashCode();
+        return result;
     }
 }
