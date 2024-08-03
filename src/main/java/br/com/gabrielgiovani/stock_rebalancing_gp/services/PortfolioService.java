@@ -1,7 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.controllers.exceptions.EntityRelationshipNotFoundException;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioSaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.PortfolioRepository;
@@ -18,7 +18,7 @@ import java.util.Optional;
 
 @Service
 public class PortfolioService implements CRUDService<Portfolio, Integer>,
-        EntityCreationService<Portfolio, PortfolioSaveDTO>, EntityRelationshipValidator {
+        EntityCreationService<Portfolio, PortfolioDTO>, EntityRelationshipValidator {
 
     @Autowired
     private UserService userService;
@@ -61,7 +61,7 @@ public class PortfolioService implements CRUDService<Portfolio, Integer>,
     }
 
     @Override
-    public Portfolio createEntity(PortfolioSaveDTO dto) {
+    public Portfolio createEntity(PortfolioDTO dto) {
         Portfolio portfolio = new Portfolio();
         portfolio.setId(dto.getId());
         portfolio.setName(dto.getName());

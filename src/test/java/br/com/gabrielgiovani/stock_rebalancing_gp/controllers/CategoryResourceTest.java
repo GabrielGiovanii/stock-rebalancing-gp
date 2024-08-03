@@ -1,8 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.config.TestConfig;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryResponseDTO;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategorySaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
@@ -20,10 +19,7 @@ import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.when;
@@ -59,14 +55,17 @@ class CategoryResourceTest {
 
     @Test
     void findAll_Ok() {
-        ResponseEntity<List<CategoryResponseDTO>> response = categoryResource.findAll(gabrielAuthentication);
+        ResponseEntity<List<CategoryDTO>> response = categoryResource.findAll(gabrielAuthentication);
 
-        List<CategoryResponseDTO> categoryResponseDTOS =  gabrielUser.getPortfolio().getCategories()
-                .stream().map(CategoryResponseDTO::new).toList();
+        List<CategoryDTO> categoryDTOS =  gabrielUser.getPortfolio().getCategories()
+                .stream().map(CategoryDTO::new).toList();
+
+        Set<CategoryDTO> expectedSet = new HashSet<>(categoryDTOS);
+        Set<CategoryDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
 
         assertNotNull(response.getBody());
         assertTrue(response.getBody().size() > 1);
-        assertEquals(categoryResponseDTOS, response.getBody());
+        assertEquals(expectedSet, actualSet);
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -75,7 +74,7 @@ class CategoryResourceTest {
         when(categoryServiceMock.findAllByUsername(gabrielAuthentication.getName()))
                 .thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<CategoryResponseDTO>> response = categoryResourceMock.findAll(gabrielAuthentication);
+        ResponseEntity<List<CategoryDTO>> response = categoryResourceMock.findAll(gabrielAuthentication);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -85,7 +84,7 @@ class CategoryResourceTest {
     void findById_Ok() {
         Integer categoryId = 1;
 
-        ResponseEntity<CategoryResponseDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
+        ResponseEntity<CategoryDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
 
         Optional<Category> categoryOptional = gabrielUser.getPortfolio().getCategories()
                 .stream().filter(obj -> obj.getId().equals(1)).findFirst();
@@ -94,7 +93,7 @@ class CategoryResourceTest {
 
         assertNotNull(category);
         assertNotNull(response.getBody());
-        assertEquals(new CategoryResponseDTO(category), response.getBody());
+        assertEquals(new CategoryDTO(category), response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -102,7 +101,7 @@ class CategoryResourceTest {
     void findById_NotFound() {
         Integer categoryId = Integer.MAX_VALUE;
 
-        ResponseEntity<CategoryResponseDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
+        ResponseEntity<CategoryDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -110,22 +109,18 @@ class CategoryResourceTest {
 
     @Test
     void insert_Created() {
-        CategorySaveDTO categorySaveDTO = new CategorySaveDTO();
-        categorySaveDTO.setName("Insert");
-        categorySaveDTO.setDescription("Test description");
-        categorySaveDTO.setPercentageUnderPortfolio(15.0);
-        categorySaveDTO.setPortfolioId(1);
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setName("Insert");
+        categoryDTO.setDescription("Test description");
+        categoryDTO.setPercentageUnderPortfolio(15.0);
+        categoryDTO.setPortfolioId(1);
 
-        ResponseEntity<CategoryResponseDTO> response = categoryResource.insert(gabrielAuthentication, categorySaveDTO);
-
-        CategoryResponseDTO expectedCategoryResponseDTO = new CategoryResponseDTO(categorySaveDTO);
-        expectedCategoryResponseDTO.setId(Objects.requireNonNull(response.getBody()).getId());
+        ResponseEntity<CategoryDTO> response = categoryResource.insert(gabrielAuthentication, categoryDTO);
+        categoryDTO.setId(Objects.requireNonNull(response.getBody()).getId());
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
-        assertEquals(expectedCategoryResponseDTO, response.getBody());
-        assertEquals(expectedCategoryResponseDTO.getPortfolioResponseDTO().getId(),
-                response.getBody().getPortfolioResponseDTO().getId());
+        assertEquals(categoryDTO, response.getBody());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -134,17 +129,17 @@ class CategoryResourceTest {
         User user = TestConfig.getUserMap().get("teste");
         Authentication authentication = new TestingAuthenticationToken(user.getUsername(), null);
 
-        CategorySaveDTO categorySaveDTO = new CategorySaveDTO();
-        categorySaveDTO.setId(4);
-        categorySaveDTO.setName("Update");
-        categorySaveDTO.setDescription("Test description");
-        categorySaveDTO.setPercentageUnderPortfolio(15.0);
-        categorySaveDTO.setPortfolioId(2);
+        CategoryDTO categoryDTO = new CategoryDTO();
+        categoryDTO.setId(4);
+        categoryDTO.setName("Update");
+        categoryDTO.setDescription("Test description");
+        categoryDTO.setPercentageUnderPortfolio(15.0);
+        categoryDTO.setPortfolioId(2);
 
-        ResponseEntity<CategoryResponseDTO> response = categoryResource.update(authentication, categorySaveDTO);
+        ResponseEntity<CategoryDTO> response = categoryResource.update(authentication, categoryDTO);
 
         assertNotNull(response.getBody());
-        assertEquals(new CategoryResponseDTO(categorySaveDTO), response.getBody());
+        assertEquals(categoryDTO, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

@@ -1,8 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.config.TestConfig;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioResponseDTO;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioSaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.User;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
 import org.junit.jupiter.api.BeforeEach;
@@ -50,10 +49,10 @@ public class PortfolioResourceTest {
 
     @Test
     void findAll_Ok() {
-        ResponseEntity<List<PortfolioResponseDTO>> response = portfolioResource.findAll(gabrielAuthentication);
+        ResponseEntity<List<PortfolioDTO>> response = portfolioResource.findAll(gabrielAuthentication);
 
         assertNotNull(response.getBody());
-        assertEquals(new PortfolioResponseDTO(gabrielUser.getPortfolio()), response.getBody().getFirst());
+        assertEquals(new PortfolioDTO(gabrielUser.getPortfolio()), response.getBody().getFirst());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -62,7 +61,7 @@ public class PortfolioResourceTest {
         when(portfolioServiceMock.findAllByUsername(gabrielAuthentication.getName()))
                 .thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<PortfolioResponseDTO>> response = portfolioResourceMock.findAll(gabrielAuthentication);
+        ResponseEntity<List<PortfolioDTO>> response = portfolioResourceMock.findAll(gabrielAuthentication);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -72,10 +71,10 @@ public class PortfolioResourceTest {
     void findById_Ok() {
         Integer portfolioId = 1;
 
-        ResponseEntity<PortfolioResponseDTO> response = portfolioResource.findById(gabrielAuthentication, portfolioId);
+        ResponseEntity<PortfolioDTO> response = portfolioResource.findById(gabrielAuthentication, portfolioId);
 
         assertNotNull(response.getBody());
-        assertEquals(new PortfolioResponseDTO(gabrielUser.getPortfolio()), response.getBody());
+        assertEquals(new PortfolioDTO(gabrielUser.getPortfolio()), response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 
@@ -83,7 +82,7 @@ public class PortfolioResourceTest {
     void findById_NotFound() {
         Integer portfolioId = Integer.MAX_VALUE;
 
-        ResponseEntity<PortfolioResponseDTO> response = portfolioResource.findById(gabrielAuthentication, portfolioId);
+        ResponseEntity<PortfolioDTO> response = portfolioResource.findById(gabrielAuthentication, portfolioId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -94,20 +93,18 @@ public class PortfolioResourceTest {
         User user = TestConfig.getUserMap().get("test123");
         Authentication authentication = new TestingAuthenticationToken(user.getUsername(), null);
 
-        PortfolioSaveDTO portfolioSaveDTO = new PortfolioSaveDTO();
-        portfolioSaveDTO.setName("Insert");
-        portfolioSaveDTO.setDescription("Test description");
-        portfolioSaveDTO.setInvestmentPercentage(100.0);
-        portfolioSaveDTO.setUserId(4);
+        PortfolioDTO portfolioDTO = new PortfolioDTO();
+        portfolioDTO.setName("Insert");
+        portfolioDTO.setDescription("Test description");
+        portfolioDTO.setInvestmentPercentage(100.0);
+        portfolioDTO.setUserId(4);
 
-        ResponseEntity<PortfolioResponseDTO> response = portfolioResource.insert(authentication, portfolioSaveDTO);
-
-        PortfolioResponseDTO expectedPortfolioResponseDTO = new PortfolioResponseDTO(portfolioSaveDTO);
-        expectedPortfolioResponseDTO.setId(Objects.requireNonNull(response.getBody()).getId());
+        ResponseEntity<PortfolioDTO> response = portfolioResource.insert(authentication, portfolioDTO);
+        portfolioDTO.setId(Objects.requireNonNull(response.getBody()).getId());
 
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getId());
-        assertEquals(expectedPortfolioResponseDTO, response.getBody());
+        assertEquals(portfolioDTO, response.getBody());
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
     }
 
@@ -116,17 +113,17 @@ public class PortfolioResourceTest {
         User user = TestConfig.getUserMap().get("teste");
         Authentication authentication = new TestingAuthenticationToken(user.getUsername(), null);
 
-        PortfolioSaveDTO portfolioSaveDTO = new PortfolioSaveDTO();
-        portfolioSaveDTO.setId(2);
-        portfolioSaveDTO.setName("Update");
-        portfolioSaveDTO.setDescription("Test description");
-        portfolioSaveDTO.setInvestmentPercentage(95.5);
-        portfolioSaveDTO.setUserId(2);
+        PortfolioDTO portfolioDTO = new PortfolioDTO();
+        portfolioDTO.setId(2);
+        portfolioDTO.setName("Update");
+        portfolioDTO.setDescription("Test description");
+        portfolioDTO.setInvestmentPercentage(95.5);
+        portfolioDTO.setUserId(2);
 
-        ResponseEntity<PortfolioResponseDTO> response = portfolioResource.update(authentication, portfolioSaveDTO);
+        ResponseEntity<PortfolioDTO> response = portfolioResource.update(authentication, portfolioDTO);
 
         assertNotNull(response.getBody());
-        assertEquals(new PortfolioResponseDTO(portfolioSaveDTO), response.getBody());
+        assertEquals(portfolioDTO, response.getBody());
         assertEquals(HttpStatus.OK, response.getStatusCode());
     }
 

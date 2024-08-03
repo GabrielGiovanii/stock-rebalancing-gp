@@ -1,7 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.services;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.controllers.exceptions.EntityRelationshipNotFoundException;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategorySaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.repositories.CategoryRepository;
@@ -15,7 +15,7 @@ import java.util.Optional;
 
 @Service
 public class CategoryService implements CRUDService<Category, Integer>,
-        EntityCreationService<Category, CategorySaveDTO>, EntityRelationshipValidator {
+        EntityCreationService<Category, CategoryDTO>, EntityRelationshipValidator {
 
     @Autowired
     private UserService userService;
@@ -61,7 +61,7 @@ public class CategoryService implements CRUDService<Category, Integer>,
     }
 
     @Override
-    public Category createEntity(CategorySaveDTO dto) {
+    public Category createEntity(CategoryDTO dto) {
         Category category = new Category();
         category.setId(dto.getId());
         category.setName(dto.getName());

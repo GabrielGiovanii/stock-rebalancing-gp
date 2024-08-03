@@ -1,7 +1,6 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.controllers;
 
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioResponseDTO;
-import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioSaveDTO;
+import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.PortfolioDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Portfolio;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.PortfolioService;
 import jakarta.validation.Valid;
@@ -22,7 +21,7 @@ public class PortfolioController {
     private PortfolioService portfolioService;
 
     @GetMapping
-    public ResponseEntity<List<PortfolioResponseDTO>> findAll(Authentication authentication) {
+    public ResponseEntity<List<PortfolioDTO>> findAll(Authentication authentication) {
         String username = authentication.getName();
 
         List<Portfolio> portfolios = portfolioService.findAllByUsername(username);
@@ -30,7 +29,7 @@ public class PortfolioController {
         if(!portfolios.isEmpty()) {
             return ResponseEntity.ok().body(
                     portfolios.stream()
-                    .map(PortfolioResponseDTO::new)
+                    .map(PortfolioDTO::new)
                     .toList()
             );
         } else {
@@ -39,33 +38,33 @@ public class PortfolioController {
     }
 
     @GetMapping(value = "/{id}")
-    public ResponseEntity<PortfolioResponseDTO> findById(Authentication authentication, @PathVariable Integer id) {
+    public ResponseEntity<PortfolioDTO> findById(Authentication authentication, @PathVariable Integer id) {
         String username = authentication.getName();
 
         Optional<Portfolio> portfolio = portfolioService.findByUsernameAndId(username, id);
 
-        return portfolio.map(obj -> ResponseEntity.ok().body(new PortfolioResponseDTO(obj)))
+        return portfolio.map(obj -> ResponseEntity.ok().body(new PortfolioDTO(obj)))
                 .orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).build());
     }
 
     @PostMapping
-    public ResponseEntity<PortfolioResponseDTO> insert(Authentication authentication, @Valid @RequestBody PortfolioSaveDTO portfolioSaveDTO) {
+        public ResponseEntity<PortfolioDTO> insert(Authentication authentication, @Valid @RequestBody PortfolioDTO portfolioDTO) {
         String username = authentication.getName();
 
-        Portfolio portfolio = portfolioService.createEntity(portfolioSaveDTO);
+        Portfolio portfolio = portfolioService.createEntity(portfolioDTO);
         portfolio = portfolioService.insertOrUpdate(username, portfolio);
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(new PortfolioResponseDTO(portfolio));
+        return ResponseEntity.status(HttpStatus.CREATED).body(new PortfolioDTO(portfolio));
     }
 
     @PutMapping
-    public ResponseEntity<PortfolioResponseDTO> update(Authentication authentication, @Valid @RequestBody PortfolioSaveDTO portfolioSaveDTO) {
+    public ResponseEntity<PortfolioDTO> update(Authentication authentication, @Valid @RequestBody PortfolioDTO portfolioDTO) {
         String username = authentication.getName();
 
-        Portfolio portfolio = portfolioService.createEntity(portfolioSaveDTO);
+        Portfolio portfolio = portfolioService.createEntity(portfolioDTO);
         portfolio = portfolioService.insertOrUpdate(username, portfolio);
 
-        return ResponseEntity.status(HttpStatus.OK).body(new PortfolioResponseDTO(portfolio));
+        return ResponseEntity.status(HttpStatus.OK).body(new PortfolioDTO(portfolio));
     }
 
     @DeleteMapping(value = "/{id}")
