@@ -1,10 +1,7 @@
 package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.pk.CategorySectorPK;
-import jakarta.persistence.EmbeddedId;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "category_sector",
@@ -14,6 +11,7 @@ public class CategorySector {
     @EmbeddedId
     private CategorySectorPK id;
 
+    @Column(name = "percent_under_category", nullable = false)
     private Double percentUnderCategory;
 
     public CategorySector() {
