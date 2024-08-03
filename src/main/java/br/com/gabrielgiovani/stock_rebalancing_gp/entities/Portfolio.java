@@ -6,14 +6,16 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Table(name = "portfolio")
+@Table(name = "portfolio", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"name", "user_id"})
+})
 public class Portfolio {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(unique = true, nullable = false, length = 50)
+    @Column(nullable = false, length = 50)
     private String name;
 
     @Column(length = 200)
@@ -22,8 +24,8 @@ public class Portfolio {
     @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
     private Double investmentPercentage;
 
-    @OneToOne
-    @JoinColumn(unique = true, name = "user_id")
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     @OneToMany(mappedBy = "portfolio")
