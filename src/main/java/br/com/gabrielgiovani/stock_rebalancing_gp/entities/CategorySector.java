@@ -11,7 +11,7 @@ public class CategorySector {
     @EmbeddedId
     private CategorySectorPK id;
 
-    @Column(name = "percent_under_category", nullable = false)
+    @Column(nullable = false)
     private Double percentUnderCategory;
 
     public CategorySector() {

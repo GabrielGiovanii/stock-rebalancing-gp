@@ -21,7 +21,7 @@ public class Category {
     @Column(length = 200)
     private String description;
 
-    @Column(name = "percentage_under_portfolio", nullable = false, columnDefinition = "DECIMAL(5,2)")
+    @Column(nullable = false, columnDefinition = "DECIMAL(5,2)")
     private Double percentageUnderPortfolio;
 
     @ManyToOne
