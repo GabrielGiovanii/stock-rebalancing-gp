@@ -20,6 +20,8 @@ public class UserTest {
 
     private final Set<CategorySector> categorySectorMap;
 
+    private final Set<Company> companyMap;
+
     public UserTest(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
@@ -29,6 +31,7 @@ public class UserTest {
         this.categoryMap = new HashSet<>();
         this.sectorMap = new HashSet<>();
         this.categorySectorMap = new HashSet<>();
+        this.companyMap = new HashSet<>();
     }
 
     public Integer getId() {
@@ -61,5 +64,9 @@ public class UserTest {
 
     public Set<CategorySector> getCategorySectorMap() {
         return categorySectorMap;
+    }
+
+    public Set<Company> getCompanyMap() {
+        return companyMap;
     }
 }

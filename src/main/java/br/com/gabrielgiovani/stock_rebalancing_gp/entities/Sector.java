@@ -26,8 +26,12 @@ public class Sector {
     @OneToMany(mappedBy = "id.sector", fetch = FetchType.EAGER)
     private final Set<CategorySector> categoriesSector;
 
+    @OneToMany(mappedBy = "sector")
+    private final Set<Company> companies;
+
     public Sector() {
         this.categoriesSector = new HashSet<>();
+        this.companies = new HashSet<>();
     }
 
     public Sector(String name, String description, SectorNature sectorNature) {
@@ -35,6 +39,7 @@ public class Sector {
         this.description = description;
         this.sectorNature = sectorNature.getCode();
         this.categoriesSector = new HashSet<>();
+        this.companies = new HashSet<>();
     }
 
     public Integer getId() {
@@ -71,5 +76,9 @@ public class Sector {
 
     public Set<CategorySector> getCategoriesSector() {
         return categoriesSector;
+    }
+
+    public Set<Company> getCompanies() {
+        return companies;
     }
 }

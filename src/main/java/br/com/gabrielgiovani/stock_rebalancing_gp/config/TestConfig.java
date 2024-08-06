@@ -22,7 +22,6 @@ public class TestConfig implements CommandLineRunner {
 
     private static final Map<String, UserTest> userTestMap = new HashMap<>();
 
-
     @Override
     public void run(String... args) throws Exception {
         User u1 = new User("gabriel", "1234", "Gabriel Giovani");
@@ -60,18 +59,18 @@ public class TestConfig implements CommandLineRunner {
         ut4.getPortfolioMap().add(p4);
 
         Category c1 = new Category("Total Return",
-                "Empresas sólidas no mercado que pagam dividendos.", 60.0, p1);
+                "Empresas sólidas no mercado que pagam dividendos.", 40.0, p1);
         Category c2 = new Category("Small Cap",
-                "Empresas pequenas com grande potencial de valorização.", 40.0, p1);
+                "Empresas pequenas com grande potencial de valorização.", 30.0, p1);
         Category c3 = new Category("Mid Cap",
                 "Empresas médias com médio potencial de valorização e que pagam dividendos.",
                 40.0, p1);
         Category c4 = new Category("Total Return",
-                "Empresas sólidas no mercado que pagam dividendos.", 60.0, p2);
+                "Empresas sólidas no mercado que pagam dividendos.", 30.0, p2);
         Category c5 = new Category("Total Return",
                 "Empresas sólidas no mercado que pagam dividendos.", 60.0, p3);
         Category c6 = new Category("Small Cap",
-                "Empresas pequenas com grande potencial de valorização.", 40.0, p3);
+                "Empresas pequenas com grande potencial de valorização.", 20.0, p3);
 
         p1.getCategories().add(c1);
         p1.getCategories().add(c2);
@@ -86,44 +85,106 @@ public class TestConfig implements CommandLineRunner {
         ut1.getCategoryMap().add(c3);
         ut2.getCategoryMap().add(c4);
         ut3.getCategoryMap().add(c5);
+        ut3.getCategoryMap().add(c6);
 
-        Sector s1 = new Sector("Bancos", "Banqueiros", SectorNature.NON_CYCLICAL);
-        Sector s2 = new Sector("Holding", "Misto de empresas", SectorNature.CYCLICAL);
-        Sector s3 = new Sector("Construção Civíl", "Misto de projetos", SectorNature.CYCLICAL);
-        Sector s4 = new Sector("Varejo", "Quebradeira é certa", SectorNature.CYCLICAL);
-        Sector s5 = new Sector("Varejo", "Quebradeira é certa", SectorNature.CYCLICAL);
+        Sector s1 = new Sector("Banco", null, SectorNature.CYCLICAL);
+        Sector s2 = new Sector("Energia Elétrica", null, SectorNature.NON_CYCLICAL);
+        Sector s3 = new Sector("Agricultura", null, SectorNature.NON_CYCLICAL);
+        Sector s4 = new Sector("Incorporações",
+                "Atividades voltadas para administração de shopping center e edifícios empresariais.",
+                SectorNature.CYCLICAL);
+        Sector s5 = new Sector("Construção Civíl", null, SectorNature.CYCLICAL);
+        Sector s6 = new Sector("Construção Civíl", null, SectorNature.CYCLICAL);
 
         CategorySector cs1 = new CategorySector(c1, s1, 10.0);
         CategorySector cs2 = new CategorySector(c1, s2, 5.0);
         CategorySector cs3 = new CategorySector(c1, s3, 8.0);
         CategorySector cs4 = new CategorySector(c4, s4, 6.0);
         CategorySector cs5 = new CategorySector(c5, s5, 6.5);
+        CategorySector cs6 = new CategorySector(c5, s6, 6.5);
 
         s1.getCategoriesSector().add(cs1);
         s2.getCategoriesSector().add(cs2);
         s3.getCategoriesSector().add(cs3);
         s4.getCategoriesSector().add(cs4);
         s5.getCategoriesSector().add(cs5);
+        s6.getCategoriesSector().add(cs6);
         c1.getCategorySectors().add(cs1);
         c1.getCategorySectors().add(cs2);
         c1.getCategorySectors().add(cs3);
         c4.getCategorySectors().add(cs4);
         c5.getCategorySectors().add(cs5);
+        c5.getCategorySectors().add(cs6);
 
-        testService.saveAllSector(Arrays.asList(s1, s2, s3, s4, s5));
-        testService.saveAllCategorySector(Arrays.asList(cs1, cs2, cs3, cs4, cs5));
+        testService.saveAllSector(Arrays.asList(s1, s2, s3, s4, s5, s6));
+        testService.saveAllCategorySector(Arrays.asList(cs1, cs2, cs3, cs4, cs5, cs6));
 
         ut1.getSectorMap().add(s1);
         ut1.getSectorMap().add(s2);
         ut1.getSectorMap().add(s3);
         ut2.getSectorMap().add(s4);
         ut3.getSectorMap().add(s5);
+        ut3.getSectorMap().add(s6);
 
         ut1.getCategorySectorMap().add(cs1);
         ut1.getCategorySectorMap().add(cs2);
         ut1.getCategorySectorMap().add(cs3);
         ut2.getCategorySectorMap().add(cs4);
         ut3.getCategorySectorMap().add(cs5);
+        ut3.getCategorySectorMap().add(cs6);
+
+        Company co1 = new Company(
+                "BCO PAN S.A.",
+                null,
+                "59285411000113",
+                "BTG PACTUAL SERVIÇOS FINANCEIROS SA DTVM BTG PACTUAL SERVIÇOS FINANCEIROS SA DTVM",
+                s1);
+        Company co2 = new Company(
+                "ITAU UNIBANCO HOLDING S.A.",
+                null,
+                "60872504000123",
+                "ITAU CORRETORA ACOES ITAU CORRETORA ACOES",
+                s1);
+        Company co3 = new Company(
+                "CIA ENERGETICA DE MINAS GERAIS - CEMIG",
+                null,
+                "17155730000164",
+                "ITAU CORRETORA ACOES ITAU CORRETORA ACOES",
+                s2);
+        Company co4 = new Company(
+                "NEOENERGIA S.A.",
+                null,
+                "01083200000118",
+                "ITAU CORRETORA ACOES",
+                s2);
+        Company co5 = new Company(
+                "BRASILAGRO - CIA BRAS DE PROP AGRICOLAS",
+                null,
+                "07628528000159",
+                "ITAU CORRETORA ACOES",
+                s3);
+        Company co6 = new Company(
+                "JHSF PARTICIPACOES S.A.",
+                null,
+                "08294224000165",
+                "BTG PACTUAL SERVIÇOS FINANCEIROS SA DTVM",
+                s4);
+        Company co7 = new Company(
+                "CURY CONSTRUTORA E INCORPORADORA S.A.",
+                null,
+                "08797760000183",
+                "ITAU CORRETORA ACOES",
+                s5);
+
+        testService.saveAllCompanies(Arrays.asList(co1, co2, co3, co4, co5, co6, co7));
+
+        ut1.getCompanyMap().add(co1);
+        ut1.getCompanyMap().add(co2);
+        ut1.getCompanyMap().add(co3);
+        ut1.getCompanyMap().add(co4);
+        ut1.getCompanyMap().add(co5);
+        ut2.getCompanyMap().add(co6);
+        ut3.getCompanyMap().add(co7);
     }
 
     public static Map<String, UserTest> getUserTestMap() {

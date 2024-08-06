@@ -137,9 +137,9 @@ public class SectorService implements CRUDService<Sector, Integer>,
                 categoryOptional.ifPresent(obj -> cs.getId().setCategory(obj));
             }
         } else if(object instanceof Integer integer) {
-            if(!categoryIDsFromSearchResults.contains(integer)) {
-                hasEntityRelationshipIssue = true;
-            }
+            Optional<Sector> sectorOptional = sectorRepository.findByUsernameAndId(username, integer);
+
+            hasEntityRelationshipIssue = sectorOptional.isEmpty();
         }
 
         if(hasEntityRelationshipIssue) {
