@@ -52,7 +52,7 @@ public class SectorControllerTest {
     void findAll_Ok() {
         ResponseEntity<List<SectorDTO>> response = sectorController.findAll(gabrielAuthentication);
 
-        Set<SectorDTO> expectedSet = gabrielUserTest.getSectorMap().stream().map(SectorDTO::new).collect(Collectors.toSet());
+        Set<SectorDTO> expectedSet = gabrielUserTest.getSectorSet().stream().map(SectorDTO::new).collect(Collectors.toSet());
         Set<SectorDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
 
         assertNotNull(response.getBody());
@@ -78,7 +78,7 @@ public class SectorControllerTest {
 
         ResponseEntity<SectorDTO> response = sectorController.findById(gabrielAuthentication, entityId);
 
-        Optional<Sector> entityOptional = gabrielUserTest.getSectorMap()
+        Optional<Sector> entityOptional = gabrielUserTest.getSectorSet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
 
         Sector entity = entityOptional.orElse(null);

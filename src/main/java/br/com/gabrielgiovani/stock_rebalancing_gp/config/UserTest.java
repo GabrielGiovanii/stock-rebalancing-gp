@@ -12,15 +12,15 @@ public class UserTest {
     private final String password;
     private final String fullName;
 
-    private final Set<Portfolio> portfolioMap;
+    private final Set<Portfolio> portfolioSet;
 
-    private final Set<Category> categoryMap;
+    private final Set<Category> categorySet;
 
-    private final Set<Sector> sectorMap;
+    private final Set<Sector> sectorSet;
 
-    private final Set<CategorySector> categorySectorMap;
+    private final Set<CategorySector> categorySectorSet;
 
-    private final Set<Company> companyMap;
+    private final Set<Company> companySet;
 
     private final Set<Stock> stockSet;
 
@@ -29,11 +29,11 @@ public class UserTest {
         this.username = user.getUsername();
         this.password = user.getPassword();
         this.fullName = user.getFullName();
-        this.portfolioMap = new HashSet<>();
-        this.categoryMap = new HashSet<>();
-        this.sectorMap = new HashSet<>();
-        this.categorySectorMap = new HashSet<>();
-        this.companyMap = new HashSet<>();
+        this.portfolioSet = new HashSet<>();
+        this.categorySet = new HashSet<>();
+        this.sectorSet = new HashSet<>();
+        this.categorySectorSet = new HashSet<>();
+        this.companySet = new HashSet<>();
         this.stockSet = new HashSet<>();
     }
 
@@ -53,24 +53,24 @@ public class UserTest {
         return fullName;
     }
 
-    public Set<Portfolio> getPortfolioMap() {
-        return portfolioMap;
+    public Set<Portfolio> getPortfolioSet() {
+        return portfolioSet;
     }
 
-    public Set<Category> getCategoryMap() {
-        return categoryMap;
+    public Set<Category> getCategorySet() {
+        return categorySet;
     }
 
-    public Set<Sector> getSectorMap() {
-        return sectorMap;
+    public Set<Sector> getSectorSet() {
+        return sectorSet;
     }
 
-    public Set<CategorySector> getCategorySectorMap() {
-        return categorySectorMap;
+    public Set<CategorySector> getCategorySectorSet() {
+        return categorySectorSet;
     }
 
-    public Set<Company> getCompanyMap() {
-        return companyMap;
+    public Set<Company> getCompanySet() {
+        return companySet;
     }
 
     public Set<Stock> getStockSet() {

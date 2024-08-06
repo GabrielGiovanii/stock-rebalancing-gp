@@ -58,7 +58,7 @@ class CategoryControllerTest {
     void findAll_Ok() {
         ResponseEntity<List<CategoryDTO>> response = categoryResource.findAll(gabrielAuthentication);
 
-        Set<CategoryDTO> expectedSet = gabrielUserTest.getCategoryMap()
+        Set<CategoryDTO> expectedSet = gabrielUserTest.getCategorySet()
                 .stream().map(CategoryDTO::new).collect(Collectors.toSet());
         Set<CategoryDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
 
@@ -85,7 +85,7 @@ class CategoryControllerTest {
 
         ResponseEntity<CategoryDTO> response = categoryResource.findById(gabrielAuthentication, entityId);
 
-        Optional<Category> entityOptional = gabrielUserTest.getCategoryMap()
+        Optional<Category> entityOptional = gabrielUserTest.getCategorySet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
 
         Category entity = entityOptional.orElse(null);

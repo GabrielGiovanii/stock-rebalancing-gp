@@ -51,7 +51,7 @@ public class PortfolioControllerTest {
     void findAll_Ok() {
         ResponseEntity<List<PortfolioDTO>> response = portfolioResource.findAll(gabrielAuthentication);
 
-        Set<PortfolioDTO> expectedSet = gabrielUserTest.getPortfolioMap().stream().map(PortfolioDTO::new).collect(Collectors.toSet());
+        Set<PortfolioDTO> expectedSet = gabrielUserTest.getPortfolioSet().stream().map(PortfolioDTO::new).collect(Collectors.toSet());
         Set<PortfolioDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
 
         assertNotNull(response.getBody());
@@ -76,7 +76,7 @@ public class PortfolioControllerTest {
 
         ResponseEntity<PortfolioDTO> response = portfolioResource.findById(gabrielAuthentication, entityId);
 
-        Optional<Portfolio> entityOptional = gabrielUserTest.getPortfolioMap()
+        Optional<Portfolio> entityOptional = gabrielUserTest.getPortfolioSet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
 
         Portfolio entity = entityOptional.orElse(null);

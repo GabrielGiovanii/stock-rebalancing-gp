@@ -58,7 +58,7 @@ public class CompanyControllerTest {
     void findAll_Ok() {
         ResponseEntity<List<CompanyDTO>> response = companyController.findAll(gabrielAuthentication);
 
-        Set<CompanyDTO> expectedSet = gabrielUserTest.getCompanyMap()
+        Set<CompanyDTO> expectedSet = gabrielUserTest.getCompanySet()
                 .stream().map(CompanyDTO::new).collect(Collectors.toSet());
         Set<CompanyDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
 
@@ -85,7 +85,7 @@ public class CompanyControllerTest {
 
         ResponseEntity<CompanyDTO> response = companyController.findById(gabrielAuthentication, entityId);
 
-        Optional<Company> entityOptional = gabrielUserTest.getCompanyMap()
+        Optional<Company> entityOptional = gabrielUserTest.getCompanySet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
 
         Company entity = entityOptional.orElse(null);

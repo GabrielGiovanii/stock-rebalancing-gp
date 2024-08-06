@@ -54,10 +54,10 @@ public class TestConfig implements CommandLineRunner {
         u4.setPortfolio(p4);
         testService.saveAllPortfolios(Arrays.asList(p1, p2, p3, p4));
 
-        ut1.getPortfolioMap().add(p1);
-        ut2.getPortfolioMap().add(p2);
-        ut3.getPortfolioMap().add(p3);
-        ut4.getPortfolioMap().add(p4);
+        ut1.getPortfolioSet().add(p1);
+        ut2.getPortfolioSet().add(p2);
+        ut3.getPortfolioSet().add(p3);
+        ut4.getPortfolioSet().add(p4);
 
         Category c1 = new Category("Total Return",
                 "Empresas sólidas no mercado que pagam dividendos.", 40.0, p1);
@@ -81,12 +81,12 @@ public class TestConfig implements CommandLineRunner {
         p3.getCategories().add(c6);
         testService.saveAllCategories(Arrays.asList(c1, c2, c3, c4, c5, c6));
 
-        ut1.getCategoryMap().add(c1);
-        ut1.getCategoryMap().add(c2);
-        ut1.getCategoryMap().add(c3);
-        ut2.getCategoryMap().add(c4);
-        ut3.getCategoryMap().add(c5);
-        ut3.getCategoryMap().add(c6);
+        ut1.getCategorySet().add(c1);
+        ut1.getCategorySet().add(c2);
+        ut1.getCategorySet().add(c3);
+        ut2.getCategorySet().add(c4);
+        ut3.getCategorySet().add(c5);
+        ut3.getCategorySet().add(c6);
 
         Sector s1 = new Sector("Banco", null, SectorNature.CYCLICAL);
         Sector s2 = new Sector("Energia Elétrica", null, SectorNature.NON_CYCLICAL);
@@ -120,19 +120,19 @@ public class TestConfig implements CommandLineRunner {
         testService.saveAllSector(Arrays.asList(s1, s2, s3, s4, s5, s6));
         testService.saveAllCategorySector(Arrays.asList(cs1, cs2, cs3, cs4, cs5, cs6));
 
-        ut1.getSectorMap().add(s1);
-        ut1.getSectorMap().add(s2);
-        ut1.getSectorMap().add(s3);
-        ut2.getSectorMap().add(s4);
-        ut3.getSectorMap().add(s5);
-        ut3.getSectorMap().add(s6);
+        ut1.getSectorSet().add(s1);
+        ut1.getSectorSet().add(s2);
+        ut1.getSectorSet().add(s3);
+        ut2.getSectorSet().add(s4);
+        ut3.getSectorSet().add(s5);
+        ut3.getSectorSet().add(s6);
 
-        ut1.getCategorySectorMap().add(cs1);
-        ut1.getCategorySectorMap().add(cs2);
-        ut1.getCategorySectorMap().add(cs3);
-        ut2.getCategorySectorMap().add(cs4);
-        ut3.getCategorySectorMap().add(cs5);
-        ut3.getCategorySectorMap().add(cs6);
+        ut1.getCategorySectorSet().add(cs1);
+        ut1.getCategorySectorSet().add(cs2);
+        ut1.getCategorySectorSet().add(cs3);
+        ut2.getCategorySectorSet().add(cs4);
+        ut3.getCategorySectorSet().add(cs5);
+        ut3.getCategorySectorSet().add(cs6);
 
         Company co1 = new Company(
                 "BCO PAN S.A.",
@@ -179,13 +179,13 @@ public class TestConfig implements CommandLineRunner {
 
         testService.saveAllCompanies(Arrays.asList(co1, co2, co3, co4, co5, co6, co7));
 
-        ut1.getCompanyMap().add(co1);
-        ut1.getCompanyMap().add(co2);
-        ut1.getCompanyMap().add(co3);
-        ut1.getCompanyMap().add(co4);
-        ut1.getCompanyMap().add(co5);
-        ut2.getCompanyMap().add(co6);
-        ut3.getCompanyMap().add(co7);
+        ut1.getCompanySet().add(co1);
+        ut1.getCompanySet().add(co2);
+        ut1.getCompanySet().add(co3);
+        ut1.getCompanySet().add(co4);
+        ut1.getCompanySet().add(co5);
+        ut2.getCompanySet().add(co6);
+        ut3.getCompanySet().add(co7);
 
         Stock st1 = new Stock(6.5, 8.67, "BPAN4", StockType.PREFERRED, co1);
         Stock st2 = new Stock(8.5, 28.90, "ITUB3", StockType.ORDINARY, co2);
