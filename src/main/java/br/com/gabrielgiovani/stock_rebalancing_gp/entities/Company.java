@@ -2,6 +2,9 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.entities;
 
 import jakarta.persistence.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Table(name = "company", uniqueConstraints = {
         @UniqueConstraint(columnNames = {"cnpj", "sector_id"})
@@ -28,7 +31,11 @@ public class Company {
     @JoinColumn(name = "sector_id", nullable = false)
     private Sector sector;
 
+    @OneToMany(mappedBy = "company")
+    private final Set<Stock> stocks;
+
     public Company() {
+        this.stocks = new HashSet<>();
     }
 
     public Company(String corporateName, String tradeName, String cnpj, String bookkeeperBank, Sector sector) {
@@ -37,6 +44,7 @@ public class Company {
         this.cnpj = cnpj;
         this.bookkeeperBank = bookkeeperBank;
         this.sector = sector;
+        this.stocks = new HashSet<>();
     }
 
     public Integer getId() {
@@ -85,5 +93,9 @@ public class Company {
 
     public void setSector(Sector sector) {
         this.sector = sector;
+    }
+
+    public Set<Stock> getStocks() {
+        return stocks;
     }
 }

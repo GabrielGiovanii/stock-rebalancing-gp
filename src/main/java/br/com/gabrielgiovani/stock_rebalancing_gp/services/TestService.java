@@ -33,6 +33,9 @@ public class TestService {
     @Autowired
     private CompanyRepository companyRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
+
     public void saveAllUsers(List<User> entities) {
         entities.forEach(obj -> userService.encryptPassword(obj));
 
@@ -57,5 +60,9 @@ public class TestService {
 
     public void saveAllCompanies(List<Company> entities) {
         companyRepository.saveAll(entities);
+    }
+
+    public void saveAllStocks(List<Stock> entities) {
+        stockRepository.saveAll(entities);
     }
 }

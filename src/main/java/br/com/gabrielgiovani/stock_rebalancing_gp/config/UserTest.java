@@ -22,6 +22,8 @@ public class UserTest {
 
     private final Set<Company> companyMap;
 
+    private final Set<Stock> stockSet;
+
     public UserTest(User user) {
         this.id = user.getId();
         this.username = user.getUsername();
@@ -32,6 +34,7 @@ public class UserTest {
         this.sectorMap = new HashSet<>();
         this.categorySectorMap = new HashSet<>();
         this.companyMap = new HashSet<>();
+        this.stockSet = new HashSet<>();
     }
 
     public Integer getId() {
@@ -68,5 +71,9 @@ public class UserTest {
 
     public Set<Company> getCompanyMap() {
         return companyMap;
+    }
+
+    public Set<Stock> getStockSet() {
+        return stockSet;
     }
 }

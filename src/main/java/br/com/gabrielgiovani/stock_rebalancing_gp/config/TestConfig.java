@@ -2,6 +2,7 @@ package br.com.gabrielgiovani.stock_rebalancing_gp.config;
 
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.*;
 import br.com.gabrielgiovani.stock_rebalancing_gp.enums.SectorNature;
+import br.com.gabrielgiovani.stock_rebalancing_gp.enums.StockType;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
@@ -185,6 +186,43 @@ public class TestConfig implements CommandLineRunner {
         ut1.getCompanyMap().add(co5);
         ut2.getCompanyMap().add(co6);
         ut3.getCompanyMap().add(co7);
+
+        Stock st1 = new Stock(6.5, 8.67, "BPAN4", StockType.PREFERRED, co1);
+        Stock st2 = new Stock(8.5, 28.90, "ITUB3", StockType.ORDINARY, co2);
+        Stock st3 = new Stock(8.8, 33.62, "ITUB4", StockType.PREFERRED, co2);
+        Stock st4 = new Stock(7.5, 10.73, "CMIG4", StockType.PREFERRED, co3);
+        Stock st5 = new Stock(7.1, 18.08, "NEOE3", StockType.ORDINARY, co4);
+        Stock st6 = new Stock(6.9, 25.70, "AGRO3", StockType.ORDINARY, co5);
+        Stock st7 = new Stock(7.2, 21.42, "CURY3", StockType.ORDINARY, co7);
+        Stock st8 = new Stock(7.3, 22.42, "CURY4", StockType.ORDINARY, co7);
+
+        st1.setCompany(co1);
+        st2.setCompany(co2);
+        st3.setCompany(co2);
+        st4.setCompany(co3);
+        st5.setCompany(co4);
+        st6.setCompany(co5);
+        st7.setCompany(co7);
+        st8.setCompany(co7);
+        co1.getStocks().add(st1);
+        co2.getStocks().add(st2);
+        co2.getStocks().add(st3);
+        co3.getStocks().add(st4);
+        co4.getStocks().add(st5);
+        co5.getStocks().add(st6);
+        co7.getStocks().add(st7);
+        co7.getStocks().add(st8);
+
+        testService.saveAllStocks(Arrays.asList(st1, st2, st3, st4, st5, st6, st7, st8));
+
+        ut1.getStockSet().add(st1);
+        ut1.getStockSet().add(st2);
+        ut1.getStockSet().add(st3);
+        ut1.getStockSet().add(st4);
+        ut1.getStockSet().add(st5);
+        ut1.getStockSet().add(st6);
+        ut3.getStockSet().add(st7);
+        ut3.getStockSet().add(st8);
     }
 
     public static Map<String, UserTest> getUserTestMap() {
