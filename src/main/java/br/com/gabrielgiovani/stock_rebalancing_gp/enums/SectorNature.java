@@ -20,7 +20,7 @@ public enum SectorNature {
             if(status.getCode() == code)
                 return status;
         }
-        return null;
 
+        return null;
     }
 }
