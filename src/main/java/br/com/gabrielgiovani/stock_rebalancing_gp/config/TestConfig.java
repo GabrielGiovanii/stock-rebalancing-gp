@@ -117,8 +117,8 @@ public class TestConfig implements CommandLineRunner {
         c5.getCategorySectors().add(cs5);
         c5.getCategorySectors().add(cs6);
 
-        testService.saveAllSector(Arrays.asList(s1, s2, s3, s4, s5, s6));
-        testService.saveAllCategorySector(Arrays.asList(cs1, cs2, cs3, cs4, cs5, cs6));
+        testService.saveAllSectors(Arrays.asList(s1, s2, s3, s4, s5, s6));
+        testService.saveAllCategorySectors(Arrays.asList(cs1, cs2, cs3, cs4, cs5, cs6));
 
         ut1.getSectorSet().add(s1);
         ut1.getSectorSet().add(s2);

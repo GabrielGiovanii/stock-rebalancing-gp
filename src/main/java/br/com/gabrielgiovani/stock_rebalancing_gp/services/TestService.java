@@ -50,11 +50,11 @@ public class TestService {
         categoryRepository.saveAll(entities);
     }
 
-    public void saveAllSector(List<Sector> entities) {
+    public void saveAllSectors(List<Sector> entities) {
         sectorRepository.saveAll(entities);
     }
 
-    public void saveAllCategorySector(List<CategorySector> entities) {
+    public void saveAllCategorySectors(List<CategorySector> entities) {
         categorySectorRepository.saveAll(entities);
     }
 
