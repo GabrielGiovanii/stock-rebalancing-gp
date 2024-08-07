@@ -116,7 +116,6 @@ public class TestConfig implements CommandLineRunner {
         c4.getCategorySectors().add(cs4);
         c5.getCategorySectors().add(cs5);
         c5.getCategorySectors().add(cs6);
-
         testService.saveAllSectors(Arrays.asList(s1, s2, s3, s4, s5, s6));
         testService.saveAllCategorySectors(Arrays.asList(cs1, cs2, cs3, cs4, cs5, cs6));
 
@@ -191,7 +190,6 @@ public class TestConfig implements CommandLineRunner {
         s3.getCompanies().add(co5);
         s4.getCompanies().add(co6);
         s5.getCompanies().add(co7);
-
         testService.saveAllCompanies(Arrays.asList(co1, co2, co3, co4, co5, co6, co7));
 
         ut1.getCompanySet().add(co1);
@@ -227,7 +225,6 @@ public class TestConfig implements CommandLineRunner {
         co5.getStocks().add(st6);
         co7.getStocks().add(st7);
         co7.getStocks().add(st8);
-
         testService.saveAllStocks(Arrays.asList(st1, st2, st3, st4, st5, st6, st7, st8));
 
         ut1.getStockSet().add(st1);
