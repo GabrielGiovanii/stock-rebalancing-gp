@@ -177,6 +177,21 @@ public class TestConfig implements CommandLineRunner {
                 "ITAU CORRETORA ACOES",
                 s5);
 
+        co1.setSector(s1);
+        co2.setSector(s1);
+        co3.setSector(s2);
+        co4.setSector(s2);
+        co5.setSector(s3);
+        co6.setSector(s4);
+        co7.setSector(s5);
+        s1.getCompanies().add(co1);
+        s1.getCompanies().add(co2);
+        s2.getCompanies().add(co3);
+        s2.getCompanies().add(co4);
+        s3.getCompanies().add(co5);
+        s4.getCompanies().add(co6);
+        s5.getCompanies().add(co7);
+
         testService.saveAllCompanies(Arrays.asList(co1, co2, co3, co4, co5, co6, co7));
 
         ut1.getCompanySet().add(co1);
