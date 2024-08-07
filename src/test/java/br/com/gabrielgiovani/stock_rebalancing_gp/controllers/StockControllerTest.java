@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -27,9 +26,6 @@ import static org.mockito.Mockito.when;
 @SpringBootTest
 @AutoConfigureMockMvc
 public class StockControllerTest {
-
-    @Autowired
-    private MockMvc mockMvc;
 
     @Autowired
     private StockController stockController;

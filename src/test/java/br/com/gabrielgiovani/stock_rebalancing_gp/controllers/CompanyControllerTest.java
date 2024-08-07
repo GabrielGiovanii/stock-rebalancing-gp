@@ -5,7 +5,6 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.config.UserTest;
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CompanyDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Company;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CompanyService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,9 +28,6 @@ import static org.mockito.Mockito.when;
 public class CompanyControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
     private CompanyController companyController;
 
     @Mock
@@ -40,8 +35,6 @@ public class CompanyControllerTest {
 
     @InjectMocks
     private CompanyController companyControllerMock;
-
-    private ObjectMapper objectMapper;
 
     private static UserTest gabrielUserTest;
     private static Authentication gabrielAuthentication;

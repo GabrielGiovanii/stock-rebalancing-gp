@@ -5,7 +5,6 @@ import br.com.gabrielgiovani.stock_rebalancing_gp.config.UserTest;
 import br.com.gabrielgiovani.stock_rebalancing_gp.dtos.CategoryDTO;
 import br.com.gabrielgiovani.stock_rebalancing_gp.entities.Category;
 import br.com.gabrielgiovani.stock_rebalancing_gp.services.CategoryService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -17,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.TestingAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -30,18 +28,13 @@ import static org.mockito.Mockito.when;
 class CategoryControllerTest {
 
     @Autowired
-    private MockMvc mockMvc;
-
-    @Autowired
-    private CategoryController categoryResource;
+    private CategoryController categoryController;
 
     @Mock
     private CategoryService categoryServiceMock;
 
     @InjectMocks
-    private CategoryController categoryResourceMock;
-
-    private ObjectMapper objectMapper;
+    private CategoryController categoryControllerMock;
 
     private static UserTest gabrielUserTest;
     private static Authentication gabrielAuthentication;
@@ -56,7 +49,7 @@ class CategoryControllerTest {
 
     @Test
     void findAll_Ok() {
-        ResponseEntity<List<CategoryDTO>> response = categoryResource.findAll(gabrielAuthentication);
+        ResponseEntity<List<CategoryDTO>> response = categoryController.findAll(gabrielAuthentication);
 
         Set<CategoryDTO> expectedSet = gabrielUserTest.getCategorySet()
                 .stream().map(CategoryDTO::new).collect(Collectors.toSet());
@@ -73,7 +66,7 @@ class CategoryControllerTest {
         when(categoryServiceMock.findAllByUsername(gabrielAuthentication.getName()))
                 .thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<CategoryDTO>> response = categoryResourceMock.findAll(gabrielAuthentication);
+        ResponseEntity<List<CategoryDTO>> response = categoryControllerMock.findAll(gabrielAuthentication);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -83,7 +76,7 @@ class CategoryControllerTest {
     void findById_Ok() {
         Integer entityId = 1;
 
-        ResponseEntity<CategoryDTO> response = categoryResource.findById(gabrielAuthentication, entityId);
+        ResponseEntity<CategoryDTO> response = categoryController.findById(gabrielAuthentication, entityId);
 
         Optional<Category> entityOptional = gabrielUserTest.getCategorySet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
@@ -100,7 +93,7 @@ class CategoryControllerTest {
     void findById_NotFound() {
         Integer categoryId = Integer.MAX_VALUE;
 
-        ResponseEntity<CategoryDTO> response = categoryResource.findById(gabrielAuthentication, categoryId);
+        ResponseEntity<CategoryDTO> response = categoryController.findById(gabrielAuthentication, categoryId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -114,7 +107,7 @@ class CategoryControllerTest {
         entityDTO.setPercentageUnderPortfolio(15.0);
         entityDTO.setPortfolioId(1);
 
-        ResponseEntity<CategoryDTO> response = categoryResource.insert(gabrielAuthentication, entityDTO);
+        ResponseEntity<CategoryDTO> response = categoryController.insert(gabrielAuthentication, entityDTO);
         entityDTO.setId(Objects.requireNonNull(response.getBody()).getId());
 
         assertNotNull(response.getBody());
@@ -135,7 +128,7 @@ class CategoryControllerTest {
         entityDTO.setPercentageUnderPortfolio(15.0);
         entityDTO.setPortfolioId(2);
 
-        ResponseEntity<CategoryDTO> response = categoryResource.update(authentication, entityDTO);
+        ResponseEntity<CategoryDTO> response = categoryController.update(authentication, entityDTO);
 
         assertNotNull(response.getBody());
         assertEquals(entityDTO, response.getBody());
@@ -149,7 +142,7 @@ class CategoryControllerTest {
 
         Integer entityId = 6;
 
-        ResponseEntity<Void> response = categoryResource.deleteById(authentication, entityId);
+        ResponseEntity<Void> response = categoryController.deleteById(authentication, entityId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -159,7 +152,7 @@ class CategoryControllerTest {
     void deleteById_NotFound() {
         Integer entityId = Integer.MAX_VALUE;
 
-        ResponseEntity<Void> response = categoryResource.deleteById(gabrielAuthentication, entityId);
+        ResponseEntity<Void> response = categoryController.deleteById(gabrielAuthentication, entityId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());

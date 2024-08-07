@@ -28,13 +28,13 @@ import static org.mockito.Mockito.when;
 public class PortfolioControllerTest {
 
     @Autowired
-    private PortfolioController portfolioResource;
+    private PortfolioController portfolioController;
 
     @Mock
     private PortfolioService portfolioServiceMock;
 
     @InjectMocks
-    private PortfolioController portfolioResourceMock;
+    private PortfolioController portfolioControllerMock;
 
     private static UserTest gabrielUserTest;
     private static Authentication gabrielAuthentication;
@@ -49,7 +49,7 @@ public class PortfolioControllerTest {
 
     @Test
     void findAll_Ok() {
-        ResponseEntity<List<PortfolioDTO>> response = portfolioResource.findAll(gabrielAuthentication);
+        ResponseEntity<List<PortfolioDTO>> response = portfolioController.findAll(gabrielAuthentication);
 
         Set<PortfolioDTO> expectedSet = gabrielUserTest.getPortfolioSet().stream().map(PortfolioDTO::new).collect(Collectors.toSet());
         Set<PortfolioDTO> actualSet = new HashSet<>(Objects.requireNonNull(response.getBody()));
@@ -64,7 +64,7 @@ public class PortfolioControllerTest {
         when(portfolioServiceMock.findAllByUsername(gabrielAuthentication.getName()))
                 .thenReturn(Collections.emptyList());
 
-        ResponseEntity<List<PortfolioDTO>> response = portfolioResourceMock.findAll(gabrielAuthentication);
+        ResponseEntity<List<PortfolioDTO>> response = portfolioControllerMock.findAll(gabrielAuthentication);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -74,7 +74,7 @@ public class PortfolioControllerTest {
     void findById_Ok() {
         Integer entityId = 1;
 
-        ResponseEntity<PortfolioDTO> response = portfolioResource.findById(gabrielAuthentication, entityId);
+        ResponseEntity<PortfolioDTO> response = portfolioController.findById(gabrielAuthentication, entityId);
 
         Optional<Portfolio> entityOptional = gabrielUserTest.getPortfolioSet()
                 .stream().filter(obj -> obj.getId().equals(entityId)).findFirst();
@@ -91,7 +91,7 @@ public class PortfolioControllerTest {
     void findById_NotFound() {
         Integer entityId = Integer.MAX_VALUE;
 
-        ResponseEntity<PortfolioDTO> response = portfolioResource.findById(gabrielAuthentication, entityId);
+        ResponseEntity<PortfolioDTO> response = portfolioController.findById(gabrielAuthentication, entityId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
@@ -108,7 +108,7 @@ public class PortfolioControllerTest {
         entityDTO.setInvestmentPercentage(100.0);
         entityDTO.setUserId(4);
 
-        ResponseEntity<PortfolioDTO> response = portfolioResource.insert(authentication, entityDTO);
+        ResponseEntity<PortfolioDTO> response = portfolioController.insert(authentication, entityDTO);
         entityDTO.setId(Objects.requireNonNull(response.getBody()).getId());
 
         assertNotNull(response.getBody());
@@ -129,7 +129,7 @@ public class PortfolioControllerTest {
         entityDTO.setInvestmentPercentage(95.5);
         entityDTO.setUserId(2);
 
-        ResponseEntity<PortfolioDTO> response = portfolioResource.update(authentication, entityDTO);
+        ResponseEntity<PortfolioDTO> response = portfolioController.update(authentication, entityDTO);
 
         assertNotNull(response.getBody());
         assertEquals(entityDTO, response.getBody());
@@ -143,7 +143,7 @@ public class PortfolioControllerTest {
 
         Integer entityId = 4;
 
-        ResponseEntity<Void> response = portfolioResource.deleteById(authentication, entityId);
+        ResponseEntity<Void> response = portfolioController.deleteById(authentication, entityId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
@@ -153,7 +153,7 @@ public class PortfolioControllerTest {
     void deleteById_NotFound() {
         Integer entityId = Integer.MAX_VALUE;
 
-        ResponseEntity<Void> response = portfolioResource.deleteById(gabrielAuthentication, entityId);
+        ResponseEntity<Void> response = portfolioController.deleteById(gabrielAuthentication, entityId);
 
         assertNull(response.getBody());
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
